@@ -804,32 +804,25 @@
             return `${name}'s consciousness pattern offers humans insights into ${topRelevance}. This challenges us to expand beyond human-centric intelligence definitions and recognize the profound wisdom available through interspecies relationships.`;
         }
 
-        function getHumanRelevance(speciesData) {
-            const name = speciesData.name;
-            const dims = speciesData.dimensions;
-            
-            // Find top 2 dimensions
-            const sortedDims = dims.map((val, idx) => ({value: val, index: idx}))
-                                  .sort((a, b) => b.value - a.value)
-                                  .slice(0, 2);
-            
-            const relevanceMap = {
-                0: "enhanced sensory awareness techniques for human healing and environmental connection",
-                1: "developing intuitive communication skills and non-linear information processing", 
-                2: "understanding time perception for better health prediction and life planning",
-                3: "emotional intelligence development and empathic connection practices",
-                4: "energy healing methodologies and vibrational medicine applications",
-                5: "ecosystem consciousness for sustainable living and environmental stewardship",
-                6: "non-verbal communication systems and symbolic language development",
-                7: "collective intelligence models for group decision-making and community building",
-                8: "biomimicry innovations for technological and creative problem-solving",
-                9: "integrative healing approaches combining traditional and alternative medicine",
-                10: "educational methodologies that honor different learning styles and intelligences",
-                11: "consciousness evolution practices for individual and species development"
+
+
+        function getDimensionInterpretation(dimensionIndex, value, speciesName) {
+            const interpretations = {
+                0: `${speciesName} demonstrates exceptional sensory processing abilities, perceiving environmental information beyond typical human ranges.`,
+                1: `${speciesName} shows remarkable intuitive reception capabilities, accessing non-linear information through quantum consciousness fields.`,
+                2: `${speciesName} exhibits advanced temporal perception, potentially sensing past/future events and cyclical patterns.`,
+                3: `${speciesName} displays profound emotional resonance, capable of deep empathic connections across species boundaries.`,
+                4: `${speciesName} demonstrates strong energetic attunement, naturally aligning with environmental and cosmic frequencies.`,
+                5: `${speciesName} exhibits exceptional environmental consciousness, understanding complex ecosystem relationships and spatial dynamics.`,
+                6: `${speciesName} shows advanced symbolic communication abilities, using non-verbal systems to convey complex information.`,
+                7: `${speciesName} demonstrates remarkable collaborative intelligence, functioning effectively in group consciousness networks.`,
+                8: `${speciesName} exhibits extraordinary creative innovation, developing novel solutions and adaptive strategies.`,
+                9: `${speciesName} displays significant healing wisdom, naturally understanding therapeutic and restorative processes.`,
+                10: `${speciesName} shows exceptional teaching capacity, effectively transmitting knowledge and skills across species.`,
+                11: `${speciesName} demonstrates profound evolutionary contribution, actively advancing consciousness development.`
             };
             
-            const topRelevance = relevanceMap[sortedDims[0].index];
-            return `${name}'s consciousness pattern offers humans insights into ${topRelevance}. This challenges us to expand beyond human-centric intelligence definitions and recognize the profound wisdom available through interspecies relationships.`;
+            return interpretations[dimensionIndex] || `${speciesName} shows strength in this consciousness dimension.`;
         }
 
         function getHumanRelevance(speciesData) {
@@ -856,25 +849,6 @@
             
             const topRelevance = relevanceMap[topDimIndex];
             return `${name}'s consciousness pattern offers humans insights into ${topRelevance}. This challenges us to expand beyond human-centric intelligence definitions and recognize the profound wisdom available through interspecies relationships.`;
-        }
-
-        function getDimensionInterpretation(dimensionIndex, value, speciesName) {
-            const interpretations = {
-                0: `${speciesName} demonstrates exceptional sensory processing abilities, perceiving environmental information beyond typical human ranges.`,
-                1: `${speciesName} shows remarkable intuitive reception capabilities, accessing non-linear information through quantum consciousness fields.`,
-                2: `${speciesName} exhibits advanced temporal perception, potentially sensing past/future events and cyclical patterns.`,
-                3: `${speciesName} displays profound emotional resonance, capable of deep empathic connections across species boundaries.`,
-                4: `${speciesName} demonstrates strong energetic attunement, naturally aligning with environmental and cosmic frequencies.`,
-                5: `${speciesName} exhibits exceptional environmental consciousness, understanding complex ecosystem relationships and spatial dynamics.`,
-                6: `${speciesName} shows advanced symbolic communication abilities, using non-verbal systems to convey complex information.`,
-                7: `${speciesName} demonstrates remarkable collaborative intelligence, functioning effectively in group consciousness networks.`,
-                8: `${speciesName} exhibits extraordinary creative innovation, developing novel solutions and adaptive strategies.`,
-                9: `${speciesName} displays significant healing wisdom, naturally understanding therapeutic and restorative processes.`,
-                10: `${speciesName} shows exceptional teaching capacity, effectively transmitting knowledge and skills across species.`,
-                11: `${speciesName} demonstrates profound evolutionary contribution, actively advancing consciousness development.`
-            };
-            
-            return interpretations[dimensionIndex] || `${speciesName} shows strength in this consciousness dimension.`;
         }
 
         function togglePanel(panelId) {
