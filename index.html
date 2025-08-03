@@ -207,6 +207,21 @@
                 </div>
             </div>
         </div>
+
+        <!-- Plain English Insights Panel -->
+        <div id="insightsPanel" class="info-panel" style="bottom: 20px; right: 20px; display: none;">
+            <div class="panel-header" onclick="togglePanel('insightsPanel')">
+                <h3 style="margin: 0; color: #4a9eff;">🔍 Intelligence Insights</h3>
+                <button class="collapse-btn" id="insightsPanelBtn">−</button>
+            </div>
+            <div class="panel-content" id="insightsPanelContent">
+                <div id="insightsContent">
+                    <p style="color: #45ff8a; font-style: italic; margin: 0;">
+                        Click a species to discover how their intelligence patterns relate to other species and contribute to human understanding...
+                    </p>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -624,6 +639,8 @@
         function showSpeciesInfo(speciesData) {
             const panel = document.getElementById('speciesPanel');
             const info = document.getElementById('speciesInfo');
+            const insightsPanel = document.getElementById('insightsPanel');
+            const insightsContent = document.getElementById('insightsContent');
             
             let html = `<h4>${speciesData.name}</h4>`;
             html += `<p><strong>Consciousness Signature:</strong></p>`;
@@ -638,6 +655,226 @@
 
             info.innerHTML = html;
             panel.style.display = 'block';
+
+            // Generate Plain English Insights
+            const insights = generateSpeciesInsights(speciesData);
+            insightsContent.innerHTML = insights;
+            insightsPanel.style.display = 'block';
+        }
+
+        function generateSpeciesInsights(speciesData) {
+            const name = speciesData.name;
+            const dims = speciesData.dimensions;
+            
+            // Calculate key strengths (dimensions > 8)
+            const strengths = [];
+            const applications = [];
+            const relationships = [];
+            
+            dims.forEach((value, index) => {
+                if (value > 8) {
+                    strengths.push({
+                        dimension: dimensions[index],
+                        value: value,
+                        index: index
+                    });
+                }
+            });
+
+            // Generate insights based on dimensional patterns
+            let insights = `<h4 style="color: #4a9eff; margin-top: 0;">🔍 ${name} Intelligence Insights</h4>`;
+            
+            if (strengths.length > 0) {
+                insights += `<div style="margin-bottom: 15px;">
+                    <strong style="color: #45ff8a;">Key Intelligence Strengths:</strong><br>`;
+                
+                strengths.forEach(strength => {
+                    const interpretation = getdimensionInterpretation(strength.index, strength.value, name);
+                    insights += `<div style="margin: 8px 0; padding: 8px; background: rgba(74, 158, 255, 0.1); border-radius: 5px;">
+                        <span style="color: #4a9eff;">${strength.dimension.split('.')[1]}</span> (${strength.value}/12)<br>
+                        <span style="font-size: 0.9em;">${interpretation}</span>
+                    </div>`;
+                });
+                insights += `</div>`;
+            }
+
+            // Relationship insights with other species
+            const relationshipInsights = getRelationshipInsights(speciesData);
+            if (relationshipInsights.length > 0) {
+                insights += `<div style="margin-bottom: 15px;">
+                    <strong style="color: #45ff8a;">Consciousness Relationships:</strong><br>`;
+                
+                relationshipInsights.forEach(rel => {
+                    insights += `<div style="margin: 8px 0; padding: 8px; background: rgba(69, 255, 138, 0.1); border-radius: 5px;">
+                        <strong>${rel.species}</strong><br>
+                        <span style="font-size: 0.9em;">${rel.insight}</span>
+                    </div>`;
+                });
+                insights += `</div>`;
+            }
+
+            // Human relevance
+            const humanRelevance = getHumanRelevance(speciesData);
+            insights += `<div style="margin-bottom: 10px;">
+                <strong style="color: #45ff8a;">Relevance for Humans:</strong><br>
+                <div style="margin: 8px 0; padding: 8px; background: rgba(255, 255, 255, 0.05); border-radius: 5px;">
+                    <span style="font-size: 0.9em;">${humanRelevance}</span>
+                </div>
+            </div>`;
+
+            return insights;
+        }
+
+        function getRelationshipInsights(speciesData) {
+            const relationships = [];
+            const currentSpecies = speciesData.name;
+            
+            species.forEach(otherSpeciesNode => {
+                const otherSpecies = otherSpeciesNode.userData;
+                if (otherSpecies.name === currentSpecies) return;
+                
+                const similarity = calculateConsciousnessSimilarity(speciesData, otherSpecies);
+                if (similarity > 0.6) {
+                    const sharedStrengths = findSharedStrengths(speciesData, otherSpecies);
+                    if (sharedStrengths.length > 0) {
+                        relationships.push({
+                            species: otherSpecies.name,
+                            insight: `Shares ${sharedStrengths[0]} consciousness, suggesting potential for ${getCollaborationInsight(sharedStrengths[0])}.`
+                        });
+                    }
+                }
+            });
+            
+            return relationships.slice(0, 2); // Limit to top 2 relationships
+        }
+
+        function findSharedStrengths(species1, species2) {
+            const shared = [];
+            for (let i = 0; i < 12; i++) {
+                if ((species1.dimensions[i] || 6) > 8 && (species2.dimensions[i] || 6) > 8) {
+                    shared.push(dimensions[i].split('.')[1]);
+                }
+            }
+            return shared;
+        }
+
+        function getCollaborationInsight(sharedDimension) {
+            const collaborations = {
+                "Sensory Awareness": "environmental monitoring and detection partnerships",
+                "Intuitive Reception": "telepathic communication and energy healing",
+                "Temporal Perception": "predictive abilities and time-sensitive coordination",
+                "Emotional Resonance": "therapeutic relationships and emotional support",
+                "Energetic Attunement": "vibrational healing and frequency-based communication",
+                "Environmental Consciousness": "ecosystem restoration and conservation efforts",
+                "Symbolic Communication": "cross-species language development and artistic collaboration",
+                "Collaborative Intelligence": "group problem-solving and collective decision-making",
+                "Creative Innovation": "biomimicry research and technological advancement",
+                "Healing Wisdom": "integrative medicine and therapeutic applications",
+                "Teaching Capacity": "educational partnerships and knowledge transfer",
+                "Evolutionary Contribution": "consciousness evolution and species advancement"
+            };
+            return collaborations[sharedDimension] || "mutual learning and consciousness expansion";
+        }
+
+        function getHumanRelevance(speciesData) {
+            const name = speciesData.name;
+            const dims = speciesData.dimensions;
+            
+            // Find top 2 dimensions
+            const sortedDims = dims.map((val, idx) => ({value: val, index: idx}))
+                                  .sort((a, b) => b.value - a.value)
+                                  .slice(0, 2);
+            
+            const relevanceMap = {
+                0: "enhanced sensory awareness techniques for human healing and environmental connection",
+                1: "developing intuitive communication skills and non-linear information processing",
+                2: "understanding time perception for better health prediction and life planning",
+                3: "emotional intelligence development and empathic connection practices",
+                4: "energy healing methodologies and vibrational medicine applications",
+                5: "ecosystem consciousness for sustainable living and environmental stewardship",
+                6: "non-verbal communication systems and symbolic language development",
+                7: "collective intelligence models for group decision-making and community building",
+                8: "biomimicry innovations for technological and creative problem-solving",
+                9: "integrative healing approaches combining traditional and alternative medicine",
+                10: "educational methodologies that honor different learning styles and intelligences",
+                11: "consciousness evolution practices for individual and species development"
+            };
+            
+            const topRelevance = relevanceMap[sortedDims[0].index];
+            return `${name}'s consciousness pattern offers humans insights into ${topRelevance}. This challenges us to expand beyond human-centric intelligence definitions and recognize the profound wisdom available through interspecies relationships.`;
+        }
+
+        function getHumanRelevance(speciesData) {
+            const name = speciesData.name;
+            const dims = speciesData.dimensions;
+            
+            // Find top 2 dimensions
+            const sortedDims = dims.map((val, idx) => ({value: val, index: idx}))
+                                  .sort((a, b) => b.value - a.value)
+                                  .slice(0, 2);
+            
+            const relevanceMap = {
+                0: "enhanced sensory awareness techniques for human healing and environmental connection",
+                1: "developing intuitive communication skills and non-linear information processing", 
+                2: "understanding time perception for better health prediction and life planning",
+                3: "emotional intelligence development and empathic connection practices",
+                4: "energy healing methodologies and vibrational medicine applications",
+                5: "ecosystem consciousness for sustainable living and environmental stewardship",
+                6: "non-verbal communication systems and symbolic language development",
+                7: "collective intelligence models for group decision-making and community building",
+                8: "biomimicry innovations for technological and creative problem-solving",
+                9: "integrative healing approaches combining traditional and alternative medicine",
+                10: "educational methodologies that honor different learning styles and intelligences",
+                11: "consciousness evolution practices for individual and species development"
+            };
+            
+            const topRelevance = relevanceMap[sortedDims[0].index];
+            return `${name}'s consciousness pattern offers humans insights into ${topRelevance}. This challenges us to expand beyond human-centric intelligence definitions and recognize the profound wisdom available through interspecies relationships.`;
+        }
+
+        function getHumanRelevance(speciesData) {
+            const name = speciesData.name;
+            const dims = speciesData.dimensions;
+            
+            // Find top dimension
+            const topDimIndex = dims.indexOf(Math.max(...dims));
+            
+            const relevanceMap = {
+                0: "enhanced sensory awareness techniques for human healing and environmental connection",
+                1: "developing intuitive communication skills and non-linear information processing",
+                2: "understanding time perception for better health prediction and life planning", 
+                3: "emotional intelligence development and empathic connection practices",
+                4: "energy healing methodologies and vibrational medicine applications",
+                5: "ecosystem consciousness for sustainable living and environmental stewardship",
+                6: "non-verbal communication systems and symbolic language development",
+                7: "collective intelligence models for group decision-making and community building",
+                8: "biomimicry innovations for technological and creative problem-solving",
+                9: "integrative healing approaches combining traditional and alternative medicine",
+                10: "educational methodologies that honor different learning styles and intelligences",
+                11: "consciousness evolution practices for individual and species development"
+            };
+            
+            const topRelevance = relevanceMap[topDimIndex];
+            return `${name}'s consciousness pattern offers humans insights into ${topRelevance}. This challenges us to expand beyond human-centric intelligence definitions and recognize the profound wisdom available through interspecies relationships.`;
+        }
+
+        function getDimensionInterpretation(dimensionIndex, value, speciesName) {
+            const interpretations = {
+                0: `${speciesName} demonstrates exceptional sensory processing abilities, perceiving environmental information beyond typical human ranges.`,
+                1: `${speciesName} shows remarkable intuitive reception capabilities, accessing non-linear information through quantum consciousness fields.`,
+                2: `${speciesName} exhibits advanced temporal perception, potentially sensing past/future events and cyclical patterns.`,
+                3: `${speciesName} displays profound emotional resonance, capable of deep empathic connections across species boundaries.`,
+                4: `${speciesName} demonstrates strong energetic attunement, naturally aligning with environmental and cosmic frequencies.`,
+                5: `${speciesName} exhibits exceptional environmental consciousness, understanding complex ecosystem relationships and spatial dynamics.`,
+                6: `${speciesName} shows advanced symbolic communication abilities, using non-verbal systems to convey complex information.`,
+                7: `${speciesName} demonstrates remarkable collaborative intelligence, functioning effectively in group consciousness networks.`,
+                8: `${speciesName} exhibits extraordinary creative innovation, developing novel solutions and adaptive strategies.`,
+                9: `${speciesName} displays significant healing wisdom, naturally understanding therapeutic and restorative processes.`,
+                10: `${speciesName} shows exceptional teaching capacity, effectively transmitting knowledge and skills across species.`,
+                11: `${speciesName} demonstrates profound evolutionary contribution, actively advancing consciousness development.`
+            };
+            
+            return interpretations[dimensionIndex] || `${speciesName} shows strength in this consciousness dimension.`;
         }
 
         function togglePanel(panelId) {
