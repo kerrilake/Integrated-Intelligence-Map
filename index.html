@@ -3,1346 +3,1123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sacred Geometry Species Intelligence Constellation - Live Data</title>
-    
-    <!-- Three.js -->
+    <title>Integrated Intelligence Map - Vector Equilibrium Sacred Geometry</title>
+    <!-- Three.js Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script>
-        // Custom OrbitControls (same as before - keeping it reliable)
-        class OrbitControls {
-            constructor(camera, domElement) {
-                this.camera = camera;
-                this.domElement = domElement;
-                this.enabled = true;
-                this.enableDamping = false;
-                this.dampingFactor = 0.05;
-                this.enableZoom = true;
-                this.enablePan = true;
-                this.enableRotate = true;
-                
-                this.spherical = new THREE.Spherical();
-                this.sphericalDelta = new THREE.Spherical();
-                this.scale = 1;
-                this.panOffset = new THREE.Vector3();
-                
-                this.rotateStart = new THREE.Vector2();
-                this.rotateEnd = new THREE.Vector2();
-                this.rotateDelta = new THREE.Vector2();
-                
-                this.panStart = new THREE.Vector2();
-                this.panEnd = new THREE.Vector2();
-                this.panDelta = new THREE.Vector2();
-                
-                this.dollyStart = new THREE.Vector2();
-                this.dollyEnd = new THREE.Vector2();
-                this.dollyDelta = new THREE.Vector2();
-                
-                this.target = new THREE.Vector3();
-                this.lastPosition = new THREE.Vector3();
-                this.lastQuaternion = new THREE.Quaternion();
-                
-                this.state = { NONE: -1, ROTATE: 0, DOLLY: 1, PAN: 2 };
-                this.currentState = this.state.NONE;
-                
-                this.setupEventListeners();
-                this.update();
-            }
-            
-            setupEventListeners() {
-                this.domElement.addEventListener('mousedown', this.onMouseDown.bind(this));
-                this.domElement.addEventListener('wheel', this.onMouseWheel.bind(this));
-                this.domElement.addEventListener('contextmenu', (e) => e.preventDefault());
-            }
-            
-            onMouseDown(event) {
-                if (!this.enabled) return;
-                event.preventDefault();
-                
-                if (event.button === 0) {
-                    this.currentState = this.state.ROTATE;
-                    this.rotateStart.set(event.clientX, event.clientY);
-                } else if (event.button === 2) {
-                    this.currentState = this.state.PAN;
-                    this.panStart.set(event.clientX, event.clientY);
-                }
-                
-                if (this.currentState !== this.state.NONE) {
-                    document.addEventListener('mousemove', this.onMouseMove.bind(this));
-                    document.addEventListener('mouseup', this.onMouseUp.bind(this));
-                }
-            }
-            
-            onMouseMove(event) {
-                if (!this.enabled) return;
-                event.preventDefault();
-                
-                if (this.currentState === this.state.ROTATE) {
-                    this.rotateEnd.set(event.clientX, event.clientY);
-                    this.rotateDelta.subVectors(this.rotateEnd, this.rotateStart).multiplyScalar(0.01);
-                    
-                    this.sphericalDelta.theta -= this.rotateDelta.x;
-                    this.sphericalDelta.phi -= this.rotateDelta.y;
-                    
-                    this.rotateStart.copy(this.rotateEnd);
-                } else if (this.currentState === this.state.PAN) {
-                    this.panEnd.set(event.clientX, event.clientY);
-                    this.panDelta.subVectors(this.panEnd, this.panStart).multiplyScalar(0.01);
-                    
-                    this.panOffset.x -= this.panDelta.x;
-                    this.panOffset.y += this.panDelta.y;
-                    
-                    this.panStart.copy(this.panEnd);
-                }
-                
-                this.update();
-            }
-            
-            onMouseUp() {
-                if (!this.enabled) return;
-                
-                document.removeEventListener('mousemove', this.onMouseMove.bind(this));
-                document.removeEventListener('mouseup', this.onMouseUp.bind(this));
-                
-                this.currentState = this.state.NONE;
-            }
-            
-            onMouseWheel(event) {
-                if (!this.enabled || !this.enableZoom) return;
-                event.preventDefault();
-                
-                if (event.deltaY < 0) {
-                    this.scale *= 0.95;
-                } else {
-                    this.scale *= 1.05;
-                }
-                
-                this.update();
-            }
-            
-            update() {
-                const position = this.camera.position;
-                
-                this.spherical.setFromVector3(position.clone().sub(this.target));
-                
-                this.spherical.theta += this.sphericalDelta.theta;
-                this.spherical.phi += this.sphericalDelta.phi;
-                this.spherical.radius *= this.scale;
-                
-                this.spherical.phi = Math.max(0.1, Math.min(Math.PI - 0.1, this.spherical.phi));
-                this.spherical.radius = Math.max(5, Math.min(50, this.spherical.radius));
-                
-                position.setFromSpherical(this.spherical).add(this.target);
-                position.add(this.panOffset);
-                
-                this.camera.lookAt(this.target);
-                
-                if (this.enableDamping) {
-                    this.sphericalDelta.theta *= 1 - this.dampingFactor;
-                    this.sphericalDelta.phi *= 1 - this.dampingFactor;
-                    this.panOffset.multiplyScalar(1 - this.dampingFactor);
-                } else {
-                    this.sphericalDelta.set(0, 0, 0);
-                    this.panOffset.set(0, 0, 0);
-                }
-                
-                this.scale = 1;
-                return true;
-            }
-            
-            reset() {
-                this.target.set(0, 0, 0);
-                this.camera.position.set(0, 0, 20);
-                this.camera.lookAt(this.target);
-                this.panOffset.set(0, 0, 0);
-                this.sphericalDelta.set(0, 0, 0);
-                this.scale = 1;
-                this.update();
-            }
-        }
-        
-        THREE.OrbitControls = OrbitControls;
-    </script>
-    
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
     <!-- Poppins Font -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
-    
     <style>
-        body {
-            font-family: 'Poppins', sans-serif;
+        * {
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, #0a0a1a 0%, #1a0a3a 100%);
-            color: white;
-            overflow-x: hidden;
+            box-sizing: border-box;
         }
-        
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        
-        .sacred-header {
-            text-align: center;
-            padding: 40px 20px;
-            margin-bottom: 20px;
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .controls-panel {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-        
-        .data-controls {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            flex: 1;
-            min-width: 300px;
-        }
-        
-        .constellation-container {
-            height: 700px;
-            background: rgba(255, 255, 255, 0.02);
-            border-radius: 20px;
-            position: relative;
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3a 50%, #2a1a4a 100%);
+            min-height: 100vh;
+            color: #e0e0e0;
             overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
         }
-        
-        .control-btn {
-            padding: 12px 20px;
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-            border: none;
-            border-radius: 12px;
-            color: white;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            font-family: 'Poppins', sans-serif;
-            font-weight: 500;
+
+        .container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
         }
-        
-        .control-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-2px);
-        }
-        
-        .control-btn.active {
-            background: rgba(255, 215, 0, 0.3);
-            border-color: rgba(255, 215, 0, 0.5);
-        }
-        
-        .species-input {
-            width: 100%;
-            padding: 12px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 8px;
-            color: white;
-            font-family: 'Poppins', sans-serif;
-            margin-bottom: 10px;
-        }
-        
-        .species-input::placeholder {
-            color: rgba(255, 255, 255, 0.6);
-        }
-        
-        .species-input:focus {
-            outline: none;
-            border-color: rgba(255, 215, 0, 0.7);
-            background: rgba(255, 255, 255, 0.15);
-        }
-        
-        .data-status {
-            margin: 15px 0;
-            padding: 10px;
-            border-radius: 8px;
-            font-size: 14px;
-        }
-        
-        .status-connected {
-            background: rgba(34, 197, 94, 0.2);
-            border: 1px solid rgba(34, 197, 94, 0.4);
-            color: #4ade80;
-        }
-        
-        .status-loading {
-            background: rgba(255, 215, 0, 0.2);
-            border: 1px solid rgba(255, 215, 0, 0.4);
-            color: #fbbf24;
-        }
-        
-        .status-error {
-            background: rgba(239, 68, 68, 0.2);
-            border: 1px solid rgba(239, 68, 68, 0.4);
-            color: #f87171;
-        }
-        
-        .dimension-control {
+
+        .header {
             position: absolute;
             top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .header h1 {
+            font-size: 1.8em;
+            background: linear-gradient(135deg, #ff6b9d, #c5a3ff, #6bcf7f);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 0.9em;
+            color: #b0b0b0;
+            font-style: italic;
+        }
+
+        .controls {
+            position: absolute;
+            top: 120px;
             left: 20px;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            min-width: 280px;
+        }
+
+        .control-section {
+            margin-bottom: 20px;
+        }
+
+        .control-section h3 {
+            color: #ff6b9d;
+            font-size: 1em;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .dimension-controls {
             display: flex;
             align-items: center;
             gap: 10px;
-            padding: 12px;
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            z-index: 10;
+            margin-bottom: 10px;
         }
-        
+
         .dimension-btn {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 18px;
-            font-weight: bold;
+            background: rgba(255, 107, 157, 0.2);
+            border: 1px solid #ff6b9d;
+            color: #ff6b9d;
+            padding: 8px 12px;
+            border-radius: 8px;
             cursor: pointer;
-            padding: 5px 10px;
-            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
             transition: all 0.3s ease;
         }
-        
-        .dimension-btn:hover:not(:disabled) {
+
+        .dimension-btn:hover {
+            background: rgba(255, 107, 157, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .current-dimension {
+            color: #6bcf7f;
+            font-weight: 600;
+        }
+
+        .species-list {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 10px;
+        }
+
+        .species-item {
+            padding: 8px 12px;
+            margin: 5px 0;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9em;
+        }
+
+        .species-item:hover {
             background: rgba(255, 255, 255, 0.2);
-            color: #ffd700;
+            transform: translateX(5px);
         }
-        
-        .dimension-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
+
+        .species-item.selected {
+            background: rgba(107, 207, 127, 0.3);
+            border: 1px solid #6bcf7f;
         }
-        
-        .loading-screen {
+
+        .data-controls {
             position: absolute;
-            inset: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px);
-            z-index: 30;
-        }
-        
-        .species-counter {
-            position: absolute;
-            top: 20px;
+            top: 120px;
             right: 20px;
-            background: rgba(255, 255, 255, 0.2);
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 15px;
             backdrop-filter: blur(10px);
-            border-radius: 12px;
-            padding: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            z-index: 10;
-            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            min-width: 250px;
         }
-        
-        .hover-card {
+
+        .load-btn {
+            background: linear-gradient(135deg, #6bcf7f, #4a9d5f);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            width: 100%;
+            margin: 5px 0;
+            transition: all 0.3s ease;
+        }
+
+        .load-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(107, 207, 127, 0.3);
+        }
+
+        .info-panel {
             position: absolute;
             bottom: 20px;
             left: 20px;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px;
             border-radius: 15px;
-            padding: 20px;
-            max-width: 350px;
-            color: #333;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            z-index: 10;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            max-width: 300px;
+            display: none;
         }
-        
-        .species-modal {
+
+        .info-panel.show {
+            display: block;
+        }
+
+        .info-panel h4 {
+            color: #c5a3ff;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .info-panel p {
+            font-size: 0.9em;
+            line-height: 1.4;
+            color: #d0d0d0;
+        }
+
+        .canvas-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .loading {
             position: absolute;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(5px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            z-index: 20;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 50;
         }
-        
-        .modal-content {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            max-width: 700px;
-            max-height: 80vh;
-            overflow-y: auto;
-            color: #333;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+
+        .loading-animation {
+            font-size: 48px;
+            animation: pulse 2s infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.2); opacity: 1; }
+        }
+
+        .instructions {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 0.8em;
+            color: #b0b0b0;
+            max-width: 200px;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 107, 157, 0.5);
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 107, 157, 0.8);
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <header class="sacred-header">
-            <h1>Sacred Geometry Species Intelligence Constellation</h1>
-            <p>Live Data Integration • Flower of Life Consciousness Mapping • Perceive • Relate • Apply</p>
+        <header class="header">
+            <h1>🌸 Integrated Intelligence Map</h1>
+            <p>Vector Equilibrium Sacred Geometry • Redefining Intelligence Through Relational Consciousness</p>
         </header>
 
-        <div class="controls-panel">
-            <div class="data-controls">
-                <h3 style="margin-bottom: 15px; color: #ffd700;">🔗 Live Data Integration</h3>
-                
-                <div>
-                    <input type="text" class="species-input" id="newSpeciesInput" 
-                           placeholder="Add species to constellation (e.g., whales, trees, fungi)">
-                    <button class="control-btn" onclick="addSpeciesToConstellation()">
-                        ✨ Add to Sacred Geometry
-                    </button>
+        <div class="controls">
+            <div class="control-section">
+                <h3>🔮 Consciousness Dimensions</h3>
+                <div class="dimension-controls">
+                    <button class="dimension-btn" onclick="changeDimension(-1)">-</button>
+                    <span class="current-dimension" id="currentDimension">Dimension 1: Sensory Awareness</span>
+                    <button class="dimension-btn" onclick="changeDimension(1)">+</button>
                 </div>
-                
-                <div class="data-status" id="dataStatus">
-                    <span id="statusIcon">🔄</span> Ready to integrate species intelligence data
-                </div>
-                
-                <div style="margin-top: 15px;">
-                    <button class="control-btn" onclick="loadFromResearchAgent()" id="loadDataBtn">
-                        🧬 Load from Research Agent
-                    </button>
-                    <button class="control-btn" onclick="syncWithMainApp()" id="syncBtn">
-                        🌐 Sync with Main App
-                    </button>
+                <div style="font-size: 0.8em; color: #b0b0b0; margin-top: 5px;">
+                    Navigate 12 dimensions of intelligence
                 </div>
             </div>
-            
-            <div class="data-controls">
-                <h3 style="margin-bottom: 15px; color: #ffd700;">🌸 Sacred Geometry Controls</h3>
-                
-                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                    <button class="control-btn active" onclick="setVisualizationMode('flowerOfLife')" id="flowerBtn">
-                        🌸 Flower of Life
-                    </button>
-                    <button class="control-btn" onclick="setVisualizationMode('vectorEquilibrium')" id="vectorBtn">
-                        🔷 Vector Equilibrium
-                    </button>
-                    <button class="control-btn" onclick="setVisualizationMode('toroidal')" id="toroidalBtn">
-                        🌀 Toroidal Flow
-                    </button>
-                </div>
-                
-                <div style="margin-top: 15px;">
-                    <button class="control-btn" onclick="toggleFrequencyVisualization()" id="frequencyBtn">
-                        🎵 Show Frequencies
-                    </button>
-                    <button class="control-btn" onclick="resetView()">
-                        ↻ Reset View
-                    </button>
+
+            <div class="control-section">
+                <h3>🌌 Sacred Geometry</h3>
+                <button class="load-btn" onclick="resetView()">🌸 Reset to Flower of Life</button>
+                <button class="load-btn" onclick="toggleConnections()">⚡ Toggle Connections</button>
+                <button class="load-btn" onclick="animateConstellation()">🌀 Animate Tesla 369</button>
+            </div>
+
+            <div class="control-section">
+                <h3>👁️ Focus Species</h3>
+                <div class="species-list" id="speciesList">
+                    <!-- Species will be populated here -->
                 </div>
             </div>
         </div>
 
-        <div class="constellation-container" id="constellationContainer">
-            <!-- Loading Screen -->
-            <div class="loading-screen" id="loadingScreen">
-                <div style="text-align: center; color: white;">
-                    <div style="font-size: 48px; margin-bottom: 20px;">🌸</div>
-                    Initializing Sacred Geometry Integration...
-                    <div style="font-size: 14px; margin-top: 10px; opacity: 0.8;">
-                        Connecting to Species Intelligence Database
-                    </div>
+        <div class="data-controls">
+            <div class="control-section">
+                <h3>📊 Data Integration</h3>
+                <button class="load-btn" onclick="loadSampleData()">🧬 Load Sample Species</button>
+                <button class="load-btn" onclick="loadFromResearchApp()">🔬 Load from Research App</button>
+                <button class="load-btn" onclick="exportConstellationData()">💾 Export Sacred Geometry</button>
+            </div>
+
+            <div class="control-section">
+                <h3>🎵 Tesla Frequencies</h3>
+                <div style="font-size: 0.8em; color: #c5a3ff;">
+                    <div>396 Hz - Transformation</div>
+                    <div>528 Hz - Love/DNA Repair</div>
+                    <div>741 Hz - Intuition</div>
+                    <div>963 Hz - Unity</div>
                 </div>
             </div>
-            
-            <!-- Three.js Mount Point -->
-            <div id="threeMount" style="width: 100%; height: 100%;"></div>
-            
-            <!-- Dimension Control -->
-            <div class="dimension-control">
-                <span style="font-size: 14px;">🌀</span>
-                <button class="dimension-btn" onclick="changeDimension(-1)" id="dimDown">-</button>
-                <span id="currentDim" style="font-weight: bold; min-width: 20px; text-align: center;">1</span>
-                <button class="dimension-btn" onclick="changeDimension(1)" id="dimUp">+</button>
+        </div>
+
+        <div class="info-panel" id="infoPanel">
+            <h4 id="infoTitle">Species Information</h4>
+            <p id="infoContent">Hover over species nodes to see consciousness insights</p>
+        </div>
+
+        <div class="canvas-container">
+            <div class="loading" id="loading">
+                <div class="loading-animation">🌸</div>
+                <h3>Initializing Sacred Geometry...</h3>
+                <p>Preparing Vector Equilibrium Consciousness Map</p>
             </div>
-            
-            <!-- Species Counter -->
-            <div class="species-counter">
-                <div style="font-weight: bold; font-size: 14px;">
-                    <span id="speciesCount">0</span> Species Mapped
-                </div>
-                <div style="font-size: 12px; opacity: 0.8; margin-top: 5px;">
-                    Dimension <span id="dimDisplay">1</span>/12
-                </div>
-            </div>
-            
-            <!-- Hover Card -->
-            <div class="hover-card" id="hoverCard" style="display: none;">
-                <h3 id="hoverSpeciesName" style="font-weight: bold; margin-bottom: 10px; color: #333;"></h3>
-                <div id="hoverDataSource" style="font-size: 12px; color: #666; margin-bottom: 8px;"></div>
-                <div id="hoverFrequency" style="font-size: 12px; color: #ffd700; margin-bottom: 8px;"></div>
-                <div id="hoverDimensionInfo" style="font-size: 14px; margin: 10px 0; color: #555;"></div>
-                <p id="hoverWisdom" style="font-size: 12px; font-style: italic; color: #666;"></p>
-            </div>
-            
-            <!-- Species Modal -->
-            <div class="species-modal" id="speciesModal" style="display: none;">
-                <div class="modal-content">
-                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 20px;">
-                        <div>
-                            <h2 id="modalSpeciesName" style="font-size: 28px; font-weight: bold; margin-bottom: 5px;"></h2>
-                            <div id="modalDataSource" style="font-size: 14px; color: #666; margin-bottom: 5px;"></div>
-                            <div id="modalFrequency" style="font-size: 14px; color: #ffd700;"></div>
-                        </div>
-                        <button onclick="closeModal()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #666;">×</button>
-                    </div>
-                    
-                    <div style="margin-bottom: 20px;">
-                        <h3 style="font-weight: bold; margin-bottom: 10px;">Intelligence Wisdom</h3>
-                        <p id="modalWisdom" style="font-style: italic; color: #555; line-height: 1.6;"></p>
-                    </div>
-                    
-                    <div id="realDataSection" style="display: none; margin-bottom: 20px;">
-                        <h3 style="font-weight: bold; margin-bottom: 10px;">Research Agent Data</h3>
-                        <div id="realDataContent" style="background: #f8f9fa; padding: 15px; border-radius: 8px; font-size: 14px;"></div>
-                    </div>
-                    
-                    <div style="margin-bottom: 20px;">
-                        <h3 style="font-weight: bold; margin-bottom: 15px;">Dimensional Aspects</h3>
-                        <div id="dimensionalList"></div>
-                    </div>
-                    
-                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
-                        <div style="text-align: center; padding: 15px; background: #dbeafe; border-radius: 10px;">
-                            <div style="font-weight: bold; color: #1e40af;">Perceive</div>
-                            <div id="perceiveValue" style="font-size: 18px; font-weight: bold;"></div>
-                        </div>
-                        <div style="text-align: center; padding: 15px; background: #e9d5ff; border-radius: 10px;">
-                            <div style="font-weight: bold; color: #7c3aed;">Relate</div>
-                            <div id="relateValue" style="font-size: 18px; font-weight: bold;"></div>
-                        </div>
-                        <div style="text-align: center; padding: 15px; background: #dcfce7; border-radius: 10px;">
-                            <div style="font-weight: bold; color: #16a34a;">Apply</div>
-                            <div id="applyValue" style="font-size: 18px; font-weight: bold;"></div>
-                        </div>
-                    </div>
-                    
-                    <div style="margin-top: 20px; text-align: center;">
-                        <button class="control-btn" onclick="openInResearchAgent()" id="researchAgentBtn">
-                            🔬 View Full Research Analysis
-                        </button>
-                    </div>
-                </div>
-            </div>
+            <canvas id="geometryCanvas"></canvas>
+        </div>
+
+        <div class="instructions">
+            <strong>Sacred Navigation:</strong><br>
+            • Drag to rotate the vector equilibrium<br>
+            • Scroll to zoom consciousness layers<br>
+            • Click species for detailed insights<br>
+            • Use +/- to explore 12 dimensions
         </div>
     </div>
 
     <script>
-        // Global variables
-        let scene, camera, renderer, controls;
-        let currentDimension = 1;
-        let selectedSpecies = null;
-        let hoveredSpecies = null;
+        // ====== SACRED GEOMETRY DATA STRUCTURES ======
+        let scene, camera, renderer, vectorEquilibrium;
         let speciesNodes = [];
-        let animationId;
-        let visualizationMode = 'flowerOfLife';
-        let showFrequencies = false;
-        
-        // Data integration variables
-        let researchAgentData = {};
-        let constellationSpecies = [];
-        
-        // Sacred geometry positioning system
-        class SacredGeometryPositioner {
-            constructor() {
-                this.goldenRatio = 1.618;
-                this.speciesPositions = new Map();
-                this.nextRing = 1;
-                this.nextPetal = 0;
-                this.nextLayer = 1;
+        let connectionLines = [];
+        let currentDimension = 1;
+        let animationRunning = false;
+        let showConnections = true;
+        let mouseX = 0, mouseY = 0;
+        let isMouseDown = false;
+
+        // 12 Sacred Dimensions of Consciousness
+        const SACRED_DIMENSIONS = [
+            { id: 1, name: "Sensory Awareness", description: "Physical and energetic sensing capabilities" },
+            { id: 2, name: "Intuitive Reception", description: "Non-linear information awareness" },
+            { id: 3, name: "Temporal Perception", description: "Time and predictive consciousness" },
+            { id: 4, name: "Emotional Resonance", description: "Empathic connection and feeling-based communication" },
+            { id: 5, name: "Energetic Attunement", description: "Frequency matching and quantum entanglement" },
+            { id: 6, name: "Environmental Consciousness", description: "Ecosystem awareness and spatial intelligence" },
+            { id: 7, name: "Symbolic Communication", description: "Non-verbal, gestural, artistic expression" },
+            { id: 8, name: "Collaborative Intelligence", description: "Group consciousness and hive mind" },
+            { id: 9, name: "Creative Innovation", description: "Problem-solving, adaptation, biomimicry" },
+            { id: 10, name: "Healing Wisdom", description: "Therapeutic application and restoration" },
+            { id: 11, name: "Teaching Capacity", description: "Knowledge transmission and skill sharing" },
+            { id: 12, name: "Evolutionary Contribution", description: "Species advancement and consciousness evolution" }
+        ];
+
+        // Tesla Sacred Frequencies
+        const TESLA_FREQUENCIES = {
+            396: { name: "Liberation", color: 0xff6b9d },
+            528: { name: "Transformation", color: 0x6bcf7f },
+            741: { name: "Intuition", color: 0xc5a3ff },
+            963: { name: "Unity", color: 0xffd700 }
+        };
+
+        // Sample Species Data for Testing
+        const SAMPLE_SPECIES = [
+            {
+                name: "Dolphin",
+                dimensions: [10, 11, 9, 12, 11, 10, 9, 11, 8, 10, 9, 11],
+                frequency: 528,
+                wisdomInsight: "Masters of sonar consciousness and joyful communication",
+                color: 0x4a9eff
+            },
+            {
+                name: "Honeybee",
+                dimensions: [9, 7, 8, 8, 9, 11, 10, 12, 9, 8, 10, 10],
+                frequency: 741,
+                wisdomInsight: "Sacred geometry architects of collective intelligence",
+                color: 0xffd700
+            },
+            {
+                name: "Ancient Oak",
+                dimensions: [8, 9, 12, 7, 10, 12, 8, 9, 7, 11, 11, 12],
+                frequency: 396,
+                wisdomInsight: "Timekeepers and wisdom holders of forest consciousness",
+                color: 0x6b8e23
+            },
+            {
+                name: "Octopus",
+                dimensions: [11, 10, 8, 9, 8, 10, 11, 7, 12, 9, 8, 9],
+                frequency: 963,
+                wisdomInsight: "Shape-shifting masters of adaptive intelligence",
+                color: 0x9932cc
+            },
+            {
+                name: "Human",
+                dimensions: [8, 9, 9, 9, 7, 8, 11, 9, 10, 8, 10, 9],
+                frequency: 528,
+                wisdomInsight: "Bridge consciousness seeking harmony with all life",
+                color: 0xff6b6b
+            },
+            {
+                name: "Wolf",
+                dimensions: [10, 8, 9, 11, 9, 10, 9, 12, 9, 8, 11, 10],
+                frequency: 741,
+                wisdomInsight: "Pack consciousness teachers of loyalty and cooperation",
+                color: 0x708090
             }
+        ];
+
+        // ====== SACRED GEOMETRY INITIALIZATION ======
+        function initSacredGeometry() {
+            const canvas = document.getElementById('geometryCanvas');
+            const container = canvas.parentElement;
             
-            calculateIntelligenceFrequency(speciesData) {
-                // Calculate frequency based on P/R/A intelligence
-                const perceive = speciesData.intelligence?.perceive || 0.5;
-                const relate = speciesData.intelligence?.relate || 0.5;
-                const apply = speciesData.intelligence?.apply || 0.5;
-                
-                // Map to sacred frequencies (Tesla's 3-6-9 principle)
-                const baseFrequencies = [396, 417, 528, 639, 741, 852, 963]; // Solfeggio
-                const avgIntelligence = (perceive + relate + apply) / 3;
-                const freqIndex = Math.floor(avgIntelligence * (baseFrequencies.length - 1));
-                
-                return baseFrequencies[freqIndex];
-            }
-            
-            assignSacredPosition(speciesName, speciesData) {
-                if (this.speciesPositions.has(speciesName)) {
-                    return this.speciesPositions.get(speciesName);
-                }
-                
-                // Special positions for important species
-                if (speciesName.toLowerCase().includes('human')) {
-                    const position = { ring: 0, petal: 0, layer: 2 }; // Sacred center
-                    this.speciesPositions.set(speciesName, position);
-                    return position;
-                }
-                
-                // Calculate position based on intelligence characteristics
-                const relate = speciesData.intelligence?.relate || 0.5;
-                const apply = speciesData.intelligence?.apply || 0.5;
-                
-                // Higher relate intelligence goes to inner rings
-                const ring = Math.max(1, Math.ceil((1 - relate) * 3));
-                
-                // Apply intelligence affects petal position
-                const petal = Math.floor(apply * 6);
-                
-                // Layer based on complexity
-                const complexity = (speciesData.intelligence?.perceive || 0.5) + 
-                                 (speciesData.intelligence?.relate || 0.5) + 
-                                 (speciesData.intelligence?.apply || 0.5);
-                const layer = Math.ceil(complexity);
-                
-                const position = { ring, petal, layer };
-                this.speciesPositions.set(speciesName, position);
-                return position;
-            }
-            
-            calculateFlowerOfLifePosition(position, dimension) {
-                const { ring, petal, layer } = position;
-                const radius = ring * 3;
-                const angle = (petal * Math.PI * 2) / 6;
-                const layerHeight = (layer - 1) * 2;
-                
-                const dimensionScale = Math.pow(this.goldenRatio, dimension - 1) * 0.3;
-                
-                return {
-                    x: Math.cos(angle) * radius * dimensionScale,
-                    y: Math.sin(angle) * radius * dimensionScale,
-                    z: layerHeight * dimensionScale
-                };
-            }
-        }
-        
-        const positioner = new SacredGeometryPositioner();
-        
-        // Data integration functions
-        function loadFromResearchAgent() {
-            updateDataStatus('loading', '🔄 Connecting to Research Agent...');
-            
-            // Try to load from localStorage (Research Agent data)
-            try {
-                const intelligenceVectors = localStorage.getItem('intelligenceVectors');
-                const researchHistory = localStorage.getItem('researchHistory');
-                
-                if (intelligenceVectors) {
-                    const vectors = JSON.parse(intelligenceVectors);
-                    Object.keys(vectors).forEach(species => {
-                        addSpeciesFromResearchData(species, vectors[species]);
-                    });
-                    
-                    updateDataStatus('connected', 
-                        `✅ Loaded ${Object.keys(vectors).length} species from Research Agent`);
-                    updateSpeciesCounter();
-                } else {
-                    updateDataStatus('error', '❌ No Research Agent data found. Research some species first!');
-                }
-            } catch (error) {
-                console.error('Error loading from Research Agent:', error);
-                updateDataStatus('error', '❌ Error connecting to Research Agent');
-            }
-        }
-        
-        function addSpeciesFromResearchData(speciesName, vectorData) {
-            // Convert research agent data to constellation format
-            const speciesData = {
-                id: speciesName.toLowerCase().replace(/\s+/g, ''),
-                name: speciesName,
-                intelligence: {
-                    perceive: vectorData.perceive || 0.7,
-                    relate: vectorData.relate || 0.7,
-                    apply: vectorData.apply || 0.7
-                },
-                wisdom: "Consciousness revealed through Species Intelligence Research Agent",
-                dataSource: "Research Agent",
-                timestamp: vectorData.timestamp || new Date().toISOString(),
-                researchBacked: vectorData.researchBacked || false,
-                flowerOfLifePosition: positioner.assignSacredPosition(speciesName, {
-                    intelligence: {
-                        perceive: vectorData.perceive || 0.7,
-                        relate: vectorData.relate || 0.7,
-                        apply: vectorData.apply || 0.7
-                    }
-                }),
-                frequency: positioner.calculateIntelligenceFrequency({
-                    intelligence: {
-                        perceive: vectorData.perceive || 0.7,
-                        relate: vectorData.relate || 0.7,
-                        apply: vectorData.apply || 0.7
-                    }
-                }),
-                color: generateSpeciesColor(speciesName),
-                dimensionalAspects: generateDimensionalAspects(speciesName, vectorData)
-            };
-            
-            // Store full research data for detailed view
-            researchAgentData[speciesData.id] = vectorData;
-            
-            // Add to constellation if not already present
-            const existingIndex = constellationSpecies.findIndex(s => s.id === speciesData.id);
-            if (existingIndex >= 0) {
-                constellationSpecies[existingIndex] = speciesData;
-            } else {
-                constellationSpecies.push(speciesData);
-            }
-            
-            // Refresh the 3D scene if it exists
-            if (scene) {
-                recreateSpeciesNodes();
-            }
-        }
-        
-        function generateSpeciesColor(speciesName) {
-            // Generate color based on species name hash
-            let hash = 0;
-            for (let i = 0; i < speciesName.length; i++) {
-                hash = speciesName.charCodeAt(i) + ((hash << 5) - hash);
-            }
-            
-            // Convert to beautiful color palette
-            const hue = Math.abs(hash) % 360;
-            const saturation = 70 + (Math.abs(hash) % 30); // 70-100%
-            const lightness = 45 + (Math.abs(hash) % 20);  // 45-65%
-            
-            // Convert HSL to hex
-            const h = hue / 360;
-            const s = saturation / 100;
-            const l = lightness / 100;
-            
-            const c = (1 - Math.abs(2 * l - 1)) * s;
-            const x = c * (1 - Math.abs((h * 6) % 2 - 1));
-            const m = l - c / 2;
-            
-            let r, g, b;
-            if (h >= 0 && h < 1/6) {
-                r = c; g = x; b = 0;
-            } else if (h >= 1/6 && h < 2/6) {
-                r = x; g = c; b = 0;
-            } else if (h >= 2/6 && h < 3/6) {
-                r = 0; g = c; b = x;
-            } else if (h >= 3/6 && h < 4/6) {
-                r = 0; g = x; b = c;
-            } else if (h >= 4/6 && h < 5/6) {
-                r = x; g = 0; b = c;
-            } else {
-                r = c; g = 0; b = x;
-            }
-            
-            r = Math.round((r + m) * 255);
-            g = Math.round((g + m) * 255);
-            b = Math.round((b + m) * 255);
-            
-            return (r << 16) | (g << 8) | b;
-        }
-        
-        function generateDimensionalAspects(speciesName, vectorData) {
-            // Generate 12-dimensional aspects based on research data
-            const aspects = {};
-            const baseName = speciesName.toLowerCase();
-            
-            for (let i = 1; i <= 12; i++) {
-                if (i <= 4) {
-                    // Use actual research data for first 4 dimensions if available
-                    aspects[i] = vectorData.complexity ? 
-                        `Advanced ${baseName} consciousness patterns (Dimension ${i})` :
-                        `${speciesName} intelligence expression in dimension ${i}`;
-                } else {
-                    // Generate sacred geometry based aspects for higher dimensions
-                    const dimensionNames = [
-                        'Morphic field resonance',
-                        'Quantum coherence patterns', 
-                        'Sacred geometric alignment',
-                        'Vibrational frequency harmony',
-                        'Cosmic consciousness integration',
-                        'Universal intelligence bridging',
-                        'Divine pattern recognition',
-                        'Source consciousness connection'
-                    ];
-                    
-                    const dimIndex = i - 5;
-                    aspects[i] = `${speciesName} ${dimensionNames[dimIndex] || 'transcendent awareness'}`;
-                }
-            }
-            
-            return aspects;
-        }
-        
-        function addSpeciesToConstellation() {
-            const input = document.getElementById('newSpeciesInput');
-            const speciesName = input.value.trim();
-            
-            if (!speciesName) {
-                updateDataStatus('error', '❌ Please enter a species name');
-                return;
-            }
-            
-            updateDataStatus('loading', `🔄 Adding ${speciesName} to constellation...`);
-            
-            // Generate default intelligence data for new species
-            const defaultIntelligence = {
-                perceive: 0.5 + Math.random() * 0.4,
-                relate: 0.5 + Math.random() * 0.4,
-                apply: 0.5 + Math.random() * 0.4
-            };
-            
-            // Create species data
-            const speciesData = {
-                id: speciesName.toLowerCase().replace(/\s+/g, ''),
-                name: speciesName,
-                intelligence: defaultIntelligence,
-                wisdom: `${speciesName} demonstrates unique forms of intelligence awaiting deeper research`,
-                dataSource: "Manual Addition",
-                timestamp: new Date().toISOString(),
-                researchBacked: false,
-                flowerOfLifePosition: positioner.assignSacredPosition(speciesName, { intelligence: defaultIntelligence }),
-                frequency: positioner.calculateIntelligenceFrequency({ intelligence: defaultIntelligence }),
-                color: generateSpeciesColor(speciesName),
-                dimensionalAspects: generateDimensionalAspects(speciesName, {})
-            };
-            
-            // Add to constellation
-            const existingIndex = constellationSpecies.findIndex(s => s.id === speciesData.id);
-            if (existingIndex >= 0) {
-                constellationSpecies[existingIndex] = speciesData;
-                updateDataStatus('connected', `✅ Updated ${speciesName} in constellation`);
-            } else {
-                constellationSpecies.push(speciesData);
-                updateDataStatus('connected', `✅ Added ${speciesName} to constellation`);
-            }
-            
-            // Clear input and refresh scene
-            input.value = '';
-            updateSpeciesCounter();
-            
-            if (scene) {
-                recreateSpeciesNodes();
-            }
-        }
-        
-        function syncWithMainApp() {
-            updateDataStatus('loading', '🔄 Syncing with main Species Intelligence app...');
-            
-            // Try to sync with main app data (could be via API in future)
-            setTimeout(() => {
-                updateDataStatus('connected', '🌐 Sync with main app complete');
-            }, 1500);
-        }
-        
-        function updateDataStatus(type, message) {
-            const statusDiv = document.getElementById('dataStatus');
-            const statusIcon = document.getElementById('statusIcon');
-            
-            statusDiv.className = `data-status status-${type}`;
-            statusDiv.innerHTML = `<span id="statusIcon">${
-                type === 'connected' ? '✅' : 
-                type === 'loading' ? '🔄' : '❌'
-            }</span> ${message}`;
-        }
-        
-        function updateSpeciesCounter() {
-            document.getElementById('speciesCount').textContent = constellationSpecies.length;
-        }
-        
-        function setVisualizationMode(mode) {
-            visualizationMode = mode;
-            
-            // Update button states
-            document.querySelectorAll('[onclick*="setVisualizationMode"]').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            document.getElementById(mode === 'flowerOfLife' ? 'flowerBtn' : 
-                                    mode === 'vectorEquilibrium' ? 'vectorBtn' : 'toroidalBtn')
-                    .classList.add('active');
-            
-            // Recreate scene with new visualization
-            if (scene) {
-                recreateScene();
-            }
-        }
-        
-        function toggleFrequencyVisualization() {
-            showFrequencies = !showFrequencies;
-            const btn = document.getElementById('frequencyBtn');
-            btn.classList.toggle('active', showFrequencies);
-            
-            if (scene) {
-                recreateSpeciesNodes();
-            }
-        }
-        
-        // Three.js scene functions
-        function initScene() {
-            const container = document.getElementById('threeMount');
-            
-            // Scene
+            // Scene setup
             scene = new THREE.Scene();
             scene.background = new THREE.Color(0x0a0a1a);
-
-            // Camera
-            camera = new THREE.PerspectiveCamera(75, container.offsetWidth / container.offsetHeight, 0.1, 1000);
-            camera.position.set(0, 0, 20);
-
-            // Renderer
-            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-            renderer.setSize(container.offsetWidth, container.offsetHeight);
+            
+            // Camera setup
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(0, 0, 15);
+            
+            // Renderer setup
+            renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.shadowMap.enabled = true;
             renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-            container.appendChild(renderer.domElement);
-
-            // Controls
-            controls = new THREE.OrbitControls(camera, renderer.domElement);
-            controls.enableDamping = true;
-            controls.dampingFactor = 0.05;
-
+            
             // Lighting
-            const ambientLight = new THREE.AmbientLight(0x404040, 0.6);
+            const ambientLight = new THREE.AmbientLight(0x404040, 0.3);
             scene.add(ambientLight);
-
-            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
             directionalLight.position.set(10, 10, 5);
             directionalLight.castShadow = true;
             scene.add(directionalLight);
-
-            // Create initial scene elements
-            recreateScene();
-
-            // Mouse interaction
-            setupMouseInteraction();
-
+            
+            // Create Vector Equilibrium framework
+            createVectorEquilibrium();
+            
+            // Add cosmic background particles
+            createCosmicBackground();
+            
+            // Setup controls
+            setupMouseControls();
+            
             // Start animation
             animate();
-
-            // Hide loading screen
-            document.getElementById('loadingScreen').style.display = 'none';
+            
+            // Hide loading
+            document.getElementById('loading').style.display = 'none';
         }
-        
-        function recreateScene() {
-            // Clear existing geometry
-            while(scene.children.length > 2) { // Keep lights
-                scene.remove(scene.children[2]);
+
+        function createVectorEquilibrium() {
+            vectorEquilibrium = new THREE.Group();
+            
+            // Create the 12 vertices of vector equilibrium using sacred geometry
+            const vertices = [];
+            const radius = 8;
+            
+            // Hexagonal pattern vertices (6)
+            for (let i = 0; i < 6; i++) {
+                const angle = (i / 6) * Math.PI * 2;
+                vertices.push(new THREE.Vector3(
+                    Math.cos(angle) * radius,
+                    Math.sin(angle) * radius,
+                    0
+                ));
             }
-            speciesNodes = [];
             
-            // Create sacred geometry grid
-            createSacredGeometryGrid();
+            // Top and bottom vertices (2)
+            vertices.push(new THREE.Vector3(0, 0, radius));
+            vertices.push(new THREE.Vector3(0, 0, -radius));
             
-            // Create species nodes
-            createSpeciesNodes();
+            // Additional vertices for complete vector equilibrium (4)
+            const innerRadius = radius * 0.5;
+            for (let i = 0; i < 4; i++) {
+                const angle = (i / 4) * Math.PI * 2 + Math.PI / 4;
+                vertices.push(new THREE.Vector3(
+                    Math.cos(angle) * innerRadius,
+                    Math.sin(angle) * innerRadius,
+                    0
+                ));
+            }
+            
+            // Draw the framework lines
+            const frameGeometry = new THREE.BufferGeometry();
+            const framePositions = [];
+            
+            // Connect vertices to form vector equilibrium structure
+            const connections = [
+                [0,1], [1,2], [2,3], [3,4], [4,5], [5,0], // Outer hexagon
+                [6,7], // Top-bottom axis
+                [0,6], [2,6], [4,6], // Top connections
+                [1,7], [3,7], [5,7], // Bottom connections
+                [8,9], [9,10], [10,11], [11,8], // Inner square
+                [0,8], [1,9], [2,10], [3,11] // Outer to inner connections
+            ];
+            
+            connections.forEach(([start, end]) => {
+                framePositions.push(vertices[start].x, vertices[start].y, vertices[start].z);
+                framePositions.push(vertices[end].x, vertices[end].y, vertices[end].z);
+            });
+            
+            frameGeometry.setAttribute('position', new THREE.Float32BufferAttribute(framePositions, 3));
+            
+            const frameMaterial = new THREE.LineBasicMaterial({
+                color: 0x444444,
+                transparent: true,
+                opacity: 0.3
+            });
+            
+            const frameLines = new THREE.LineSegments(frameGeometry, frameMaterial);
+            vectorEquilibrium.add(frameLines);
+            
+            scene.add(vectorEquilibrium);
+        }
+
+        function createCosmicBackground() {
+            const particleCount = 1000;
+            const particleGeometry = new THREE.BufferGeometry();
+            const particlePositions = [];
+            
+            for (let i = 0; i < particleCount; i++) {
+                particlePositions.push(
+                    (Math.random() - 0.5) * 100,
+                    (Math.random() - 0.5) * 100,
+                    (Math.random() - 0.5) * 100
+                );
+            }
+            
+            particleGeometry.setAttribute('position', new THREE.Float32BufferAttribute(particlePositions, 3));
+            
+            const particleMaterial = new THREE.PointsMaterial({
+                color: 0x888888,
+                size: 0.5,
+                transparent: true,
+                opacity: 0.6
+            });
+            
+            const particles = new THREE.Points(particleGeometry, particleMaterial);
+            scene.add(particles);
+        }
+
+        // ====== SPECIES CONSCIOUSNESS MAPPING ======
+        function addSpeciesToConstellation(speciesData) {
+            // Calculate position based on consciousness dimensions using sacred geometry
+            const position = calculateSacredPosition(speciesData.dimensions, currentDimension);
+            
+            // Create species node
+            const nodeGeometry = new THREE.SphereGeometry(0.3, 16, 16);
+            const nodeMaterial = new THREE.MeshPhongMaterial({
+                color: speciesData.color,
+                transparent: true,
+                opacity: 0.8,
+                emissive: new THREE.Color(speciesData.color).multiplyScalar(0.1)
+            });
+            
+            const speciesNode = new THREE.Mesh(nodeGeometry, nodeMaterial);
+            speciesNode.position.copy(position);
+            speciesNode.userData = {
+                species: speciesData.name,
+                dimensions: speciesData.dimensions,
+                frequency: speciesData.frequency,
+                wisdomInsight: speciesData.wisdomInsight,
+                originalPosition: position.clone()
+            };
+            
+            // Add pulsing animation based on Tesla frequency
+            const frequency = speciesData.frequency;
+            const pulseRate = frequency / 1000; // Convert Hz to animation rate
+            speciesNode.userData.pulseRate = pulseRate;
+            
+            vectorEquilibrium.add(speciesNode);
+            speciesNodes.push(speciesNode);
+            
+            return speciesNode;
+        }
+
+        function calculateSacredPosition(dimensions, focusDimension) {
+            // Use the focused dimension and its neighbors for positioning
+            const primary = dimensions[focusDimension - 1] / 12; // Normalize to 0-1
+            const secondary = dimensions[(focusDimension % 12)] / 12;
+            const tertiary = dimensions[(focusDimension + 1) % 12] / 12;
+            
+            // Sacred geometry positioning using flower of life principles
+            const radius = 6 + primary * 2; // Distance from center
+            const angle1 = secondary * Math.PI * 2; // Horizontal angle
+            const angle2 = (tertiary - 0.5) * Math.PI; // Vertical angle
+            
+            return new THREE.Vector3(
+                Math.cos(angle1) * Math.cos(angle2) * radius,
+                Math.sin(angle1) * Math.cos(angle2) * radius,
+                Math.sin(angle2) * radius
+            );
+        }
+
+        function createConnectionLines() {
+            // Clear existing connections
+            connectionLines.forEach(line => vectorEquilibrium.remove(line));
+            connectionLines = [];
+            
+            if (!showConnections || speciesNodes.length < 2) return;
+            
+            // Create curved connections between related species
+            for (let i = 0; i < speciesNodes.length; i++) {
+                for (let j = i + 1; j < speciesNodes.length; j++) {
+                    const species1 = speciesNodes[i];
+                    const species2 = speciesNodes[j];
+                    
+                    // Calculate consciousness similarity
+                    const similarity = calculateConsciousnessSimilarity(
+                        species1.userData.dimensions,
+                        species2.userData.dimensions
+                    );
+                    
+                    if (similarity > 0.6) { // Only show strong connections
+                        const connection = createCurvedConnection(species1, species2, similarity);
+                        vectorEquilibrium.add(connection);
+                        connectionLines.push(connection);
+                    }
+                }
+            }
+        }
+
+        function calculateConsciousnessSimilarity(dims1, dims2) {
+            let similarity = 0;
+            for (let i = 0; i < 12; i++) {
+                const diff = Math.abs(dims1[i] - dims2[i]);
+                similarity += (12 - diff) / 12;
+            }
+            return similarity / 12;
+        }
+
+        function createCurvedConnection(node1, node2, strength) {
+            const pos1 = node1.position;
+            const pos2 = node2.position;
+            
+            // Create curved path using quadratic bezier
+            const midPoint = new THREE.Vector3().addVectors(pos1, pos2).multiplyScalar(0.5);
+            const curve = new THREE.QuadraticBezierCurve3(
+                pos1.clone(),
+                midPoint.clone().add(new THREE.Vector3(0, 0, 2)),
+                pos2.clone()
+            );
+            
+            const points = curve.getPoints(20);
+            const geometry = new THREE.BufferGeometry().setFromPoints(points);
+            
+            const material = new THREE.LineBasicMaterial({
+                color: 0x6bcf7f,
+                transparent: true,
+                opacity: strength * 0.5
+            });
+            
+            return new THREE.Line(geometry, material);
+        }
+
+        // ====== INTERACTION CONTROLS ======
+        function setupMouseControls() {
+            const canvas = document.getElementById('geometryCanvas');
+            
+            canvas.addEventListener('mousedown', onMouseDown, false);
+            canvas.addEventListener('mousemove', onMouseMove, false);
+            canvas.addEventListener('mouseup', onMouseUp, false);
+            canvas.addEventListener('wheel', onMouseWheel, false);
+            
+            // Touch controls for mobile
+            canvas.addEventListener('touchstart', onTouchStart, false);
+            canvas.addEventListener('touchmove', onTouchMove, false);
+            canvas.addEventListener('touchend', onTouchEnd, false);
+        }
+
+        function onMouseDown(event) {
+            isMouseDown = true;
+            mouseX = event.clientX;
+            mouseY = event.clientY;
+        }
+
+        function onMouseMove(event) {
+            if (!isMouseDown) return;
+            
+            const deltaX = event.clientX - mouseX;
+            const deltaY = event.clientY - mouseY;
+            
+            vectorEquilibrium.rotation.y += deltaX * 0.01;
+            vectorEquilibrium.rotation.x += deltaY * 0.01;
+            
+            mouseX = event.clientX;
+            mouseY = event.clientY;
+        }
+
+        function onMouseUp(event) {
+            isMouseDown = false;
+        }
+
+        function onMouseWheel(event) {
+            const zoomSpeed = 0.1;
+            camera.position.z += event.deltaY * zoomSpeed;
+            camera.position.z = Math.max(5, Math.min(30, camera.position.z));
+        }
+
+        function onTouchStart(event) {
+            if (event.touches.length === 1) {
+                mouseX = event.touches[0].clientX;
+                mouseY = event.touches[0].clientY;
+                isMouseDown = true;
+            }
+        }
+
+        function onTouchMove(event) {
+            if (event.touches.length === 1 && isMouseDown) {
+                const deltaX = event.touches[0].clientX - mouseX;
+                const deltaY = event.touches[0].clientY - mouseY;
+                
+                vectorEquilibrium.rotation.y += deltaX * 0.01;
+                vectorEquilibrium.rotation.x += deltaY * 0.01;
+                
+                mouseX = event.touches[0].clientX;
+                mouseY = event.touches[0].clientY;
+            }
+        }
+
+        function onTouchEnd(event) {
+            isMouseDown = false;
+        }
+
+        // ====== UI CONTROL FUNCTIONS ======
+        function changeDimension(direction) {
+            currentDimension += direction;
+            if (currentDimension < 1) currentDimension = 12;
+            if (currentDimension > 12) currentDimension = 1;
+            
+            const dimension = SACRED_DIMENSIONS[currentDimension - 1];
+            document.getElementById('currentDimension').textContent = 
+                `Dimension ${dimension.id}: ${dimension.name}`;
+            
+            // Reposition species based on new dimension focus
+            repositionSpecies();
+        }
+
+        function repositionSpecies() {
+            speciesNodes.forEach(node => {
+                const newPosition = calculateSacredPosition(node.userData.dimensions, currentDimension);
+                
+                // Smooth transition
+                const tween = { x: node.position.x, y: node.position.y, z: node.position.z };
+                const target = { x: newPosition.x, y: newPosition.y, z: newPosition.z };
+                
+                // Simple linear interpolation for smooth movement
+                const animate = () => {
+                    const step = 0.1;
+                    tween.x += (target.x - tween.x) * step;
+                    tween.y += (target.y - tween.y) * step;
+                    tween.z += (target.z - tween.z) * step;
+                    
+                    node.position.set(tween.x, tween.y, tween.z);
+                    
+                    if (Math.abs(target.x - tween.x) > 0.01) {
+                        requestAnimationFrame(animate);
+                    }
+                };
+                animate();
+            });
+            
+            // Recreate connections after repositioning
+            setTimeout(() => createConnectionLines(), 500);
+        }
+
+        function loadSampleData() {
+            // Clear existing species
+            clearSpecies();
+            
+            // Add sample species to constellation
+            SAMPLE_SPECIES.forEach(species => {
+                addSpeciesToConstellation(species);
+            });
             
             // Create connections
-            createConnections();
-        }
-        
-        function createSacredGeometryGrid() {
-            const material = new THREE.LineBasicMaterial({ 
-                color: 0x444488, 
-                transparent: true, 
-                opacity: 0.15 
-            });
-
-            if (visualizationMode === 'flowerOfLife') {
-                // Flower of life pattern
-                for (let ring = 0; ring <= 3; ring++) {
-                    const radius = ring * 3;
-                    const segments = ring === 0 ? 1 : 6;
-                    
-                    for (let i = 0; i < segments; i++) {
-                        const angle = ring === 0 ? 0 : (i * Math.PI * 2) / 6;
-                        
-                        const geometry = new THREE.RingGeometry(radius - 0.1, radius + 0.1, 32);
-                        const circle = new THREE.Mesh(geometry, material);
-                        circle.position.set(
-                            ring === 0 ? 0 : Math.cos(angle) * radius,
-                            ring === 0 ? 0 : Math.sin(angle) * radius,
-                            0
-                        );
-                        circle.rotation.x = Math.PI / 2;
-                        scene.add(circle);
-                    }
-                }
-            } else if (visualizationMode === 'vectorEquilibrium') {
-                // Vector equilibrium pattern (12 vertices)
-                const vertices = [];
-                // Add vector equilibrium geometry here
-                for (let i = 0; i < 12; i++) {
-                    const phi = Math.acos(-1/3);
-                    const theta = i * Math.PI * 2 / 5;
-                    vertices.push(
-                        Math.sin(phi) * Math.cos(theta) * 3,
-                        Math.sin(phi) * Math.sin(theta) * 3,
-                        Math.cos(phi) * 3
-                    );
-                }
-                
-                const geometry = new THREE.BufferGeometry();
-                geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
-                const points = new THREE.Points(geometry, new THREE.PointsMaterial({ 
-                    color: 0x444488, 
-                    size: 0.2 
-                }));
-                scene.add(points);
-            }
-        }
-        
-        function createSpeciesNodes() {
-            speciesNodes = [];
+            setTimeout(() => createConnectionLines(), 100);
             
-            constellationSpecies.forEach(species => {
-                const position = positioner.calculateFlowerOfLifePosition(species.flowerOfLifePosition, currentDimension);
+            // Update species list UI
+            updateSpeciesList();
+            
+            showNotification("✨ Sample species loaded into sacred geometry constellation!");
+        }
+
+        function loadFromResearchApp() {
+            // Try to load data from localStorage (Research App integration)
+            try {
+                const researchHistory = JSON.parse(localStorage.getItem('researchHistory') || '[]');
+                const intelligenceVectors = JSON.parse(localStorage.getItem('intelligenceVectors') || '{}');
                 
-                // Main sphere
-                const geometry = new THREE.SphereGeometry(0.4, 32, 32);
-                const material = new THREE.MeshPhongMaterial({ 
-                    color: species.color,
-                    transparent: true,
-                    opacity: 0.8,
-                    emissive: species.color,
-                    emissiveIntensity: 0.1
+                if (Object.keys(intelligenceVectors).length === 0) {
+                    showNotification("🔬 No research data found. Please use the Species Intelligence Research App first, then return here!");
+                    return;
+                }
+                
+                // Clear existing species
+                clearSpecies();
+                
+                // Convert research data to our 12-dimensional format
+                Object.values(intelligenceVectors).forEach(vector => {
+                    const speciesData = convertResearchDataToSacredGeometry(vector);
+                    addSpeciesToConstellation(speciesData);
                 });
-
-                const sphere = new THREE.Mesh(geometry, material);
-                sphere.position.set(position.x, position.y, position.z);
-                sphere.userData = { species: species };
-                sphere.castShadow = true;
-
-                // Glow effect
-                const glowGeometry = new THREE.SphereGeometry(0.6, 16, 16);
-                const glowMaterial = new THREE.MeshBasicMaterial({
-                    color: species.color,
-                    transparent: true,
-                    opacity: 0.1
-                });
-                const glow = new THREE.Mesh(glowGeometry, glowMaterial);
-                sphere.add(glow);
-
-                // Frequency visualization
-                if (showFrequencies) {
-                    const freqGeometry = new THREE.RingGeometry(0.8, 1.0, 16);
-                    const freqMaterial = new THREE.MeshBasicMaterial({
-                        color: species.color,
-                        transparent: true,
-                        opacity: 0.3
-                    });
-                    const freqRing = new THREE.Mesh(freqGeometry, freqMaterial);
-                    freqRing.rotation.x = Math.PI / 2;
-                    sphere.add(freqRing);
-                }
-
-                scene.add(sphere);
-                speciesNodes.push(sphere);
-            });
-        }
-        
-        function recreateSpeciesNodes() {
-            // Remove existing species nodes
-            speciesNodes.forEach(node => {
-                scene.remove(node);
-            });
-            speciesNodes = [];
-            
-            // Recreate with current data
-            createSpeciesNodes();
-        }
-        
-        function createConnections() {
-            if (constellationSpecies.length < 2) return;
-            
-            // Create connections between species with similar intelligence patterns
-            for (let i = 0; i < constellationSpecies.length; i++) {
-                for (let j = i + 1; j < constellationSpecies.length; j++) {
-                    const species1 = constellationSpecies[i];
-                    const species2 = constellationSpecies[j];
-                    
-                    const similarity = calculateIntelligenceSimilarity(species1, species2);
-                    
-                    if (similarity > 0.6) { // Only connect similar species
-                        const pos1 = positioner.calculateFlowerOfLifePosition(species1.flowerOfLifePosition, currentDimension);
-                        const pos2 = positioner.calculateFlowerOfLifePosition(species2.flowerOfLifePosition, currentDimension);
-
-                        const curve = new THREE.QuadraticBezierCurve3(
-                            new THREE.Vector3(pos1.x, pos1.y, pos1.z),
-                            new THREE.Vector3((pos1.x + pos2.x) / 2, (pos1.y + pos2.y) / 2 + 1, (pos1.z + pos2.z) / 2),
-                            new THREE.Vector3(pos2.x, pos2.y, pos2.z)
-                        );
-
-                        const geometry = new THREE.TubeGeometry(curve, 20, 0.02, 8, false);
-                        const material = new THREE.MeshBasicMaterial({
-                            color: 0x88aaff,
-                            transparent: true,
-                            opacity: similarity * 0.3
-                        });
-
-                        const connection = new THREE.Mesh(geometry, material);
-                        scene.add(connection);
-                    }
-                }
-            }
-        }
-        
-        function calculateIntelligenceSimilarity(species1, species2) {
-            const p1 = species1.intelligence.perceive;
-            const r1 = species1.intelligence.relate;
-            const a1 = species1.intelligence.apply;
-            
-            const p2 = species2.intelligence.perceive;
-            const r2 = species2.intelligence.relate;
-            const a2 = species2.intelligence.apply;
-            
-            const similarity = 1 - (Math.abs(p1 - p2) + Math.abs(r1 - r2) + Math.abs(a1 - a2)) / 3;
-            return similarity;
-        }
-        
-        function setupMouseInteraction() {
-            const raycaster = new THREE.Raycaster();
-            const mouse = new THREE.Vector2();
-
-            function onMouseMove(event) {
-                const rect = renderer.domElement.getBoundingClientRect();
-                mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-                mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
-
-                raycaster.setFromCamera(mouse, camera);
-                const intersects = raycaster.intersectObjects(speciesNodes);
-
-                if (intersects.length > 0) {
-                    const species = intersects[0].object.userData.species;
-                    showHoverCard(species);
-                    hoveredSpecies = species.id;
-                } else {
-                    hideHoverCard();
-                    hoveredSpecies = null;
-                }
-            }
-
-            function onMouseClick(event) {
-                const rect = renderer.domElement.getBoundingClientRect();
-                mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-                mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
-
-                raycaster.setFromCamera(mouse, camera);
-                const intersects = raycaster.intersectObjects(speciesNodes);
-
-                if (intersects.length > 0) {
-                    const species = intersects[0].object.userData.species;
-                    showSpeciesModal(species);
-                    selectedSpecies = species.id;
-                }
-            }
-
-            renderer.domElement.addEventListener('mousemove', onMouseMove);
-            renderer.domElement.addEventListener('click', onMouseClick);
-        }
-
-        function showHoverCard(species) {
-            const card = document.getElementById('hoverCard');
-            document.getElementById('hoverSpeciesName').textContent = species.name;
-            document.getElementById('hoverDataSource').textContent = `Source: ${species.dataSource}`;
-            document.getElementById('hoverFrequency').textContent = `Frequency: ${species.frequency} Hz`;
-            document.getElementById('hoverDimensionInfo').textContent = 
-                `Dimension ${currentDimension}: ${species.dimensionalAspects[currentDimension]}`;
-            document.getElementById('hoverWisdom').textContent = `"${species.wisdom.substring(0, 120)}..."`;
-            card.style.display = 'block';
-        }
-
-        function hideHoverCard() {
-            document.getElementById('hoverCard').style.display = 'none';
-        }
-
-        function showSpeciesModal(species) {
-            document.getElementById('modalSpeciesName').textContent = species.name;
-            document.getElementById('modalDataSource').textContent = `Data Source: ${species.dataSource}`;
-            document.getElementById('modalFrequency').textContent = `Sacred Frequency: ${species.frequency} Hz`;
-            document.getElementById('modalWisdom').textContent = `"${species.wisdom}"`;
-            
-            // Show research agent data if available
-            const realDataSection = document.getElementById('realDataSection');
-            const realDataContent = document.getElementById('realDataContent');
-            
-            if (researchAgentData[species.id]) {
-                realDataSection.style.display = 'block';
-                const data = researchAgentData[species.id];
-                realDataContent.innerHTML = `
-                    <div><strong>Research Quality:</strong> ${data.researchBacked ? 'AI-Enhanced' : 'Framework Analysis'}</div>
-                    <div><strong>Complexity Score:</strong> ${(data.complexity * 100).toFixed(1)}%</div>
-                    <div><strong>Human Relevance:</strong> ${(data.humanRelevance * 100).toFixed(1)}%</div>
-                    <div><strong>Research Timestamp:</strong> ${new Date(data.timestamp).toLocaleDateString()}</div>
-                `;
-            } else {
-                realDataSection.style.display = 'none';
-            }
-            
-            document.getElementById('perceiveValue').textContent = `${(species.intelligence.perceive * 100).toFixed(0)}%`;
-            document.getElementById('relateValue').textContent = `${(species.intelligence.relate * 100).toFixed(0)}%`;
-            document.getElementById('applyValue').textContent = `${(species.intelligence.apply * 100).toFixed(0)}%`;
-
-            const dimensionalList = document.getElementById('dimensionalList');
-            dimensionalList.innerHTML = '';
-            
-            for (let i = 1; i <= 12; i++) {
-                const div = document.createElement('div');
-                div.style.cssText = `
-                    padding: 12px; margin: 5px 0; border-radius: 8px; font-size: 14px;
-                    ${i === currentDimension ? 
-                        'background: #dbeafe; border-left: 4px solid #3b82f6;' : 
-                        'background: #f9fafb; border-left: 4px solid #d1d5db;'}
-                `;
-                div.innerHTML = `<strong>Dimension ${i}:</strong> ${species.dimensionalAspects[i]}`;
-                dimensionalList.appendChild(div);
-            }
-
-            document.getElementById('speciesModal').style.display = 'flex';
-        }
-
-        function closeModal() {
-            document.getElementById('speciesModal').style.display = 'none';
-            selectedSpecies = null;
-        }
-        
-        function openInResearchAgent() {
-            // Open the main Species Intelligence Research Agent
-            window.open('https://whimsical-praline-0c2bed.netlify.app/', '_blank');
-        }
-
-        function changeDimension(delta) {
-            const newDimension = currentDimension + delta;
-            if (newDimension >= 1 && newDimension <= 12) {
-                currentDimension = newDimension;
-                updateDimensionDisplay();
-                updateSpeciesPositions();
-            }
-        }
-
-        function updateDimensionDisplay() {
-            document.getElementById('currentDim').textContent = currentDimension;
-            document.getElementById('dimDisplay').textContent = currentDimension;
-            
-            document.getElementById('dimDown').disabled = currentDimension <= 1;
-            document.getElementById('dimUp').disabled = currentDimension >= 12;
-        }
-
-        function updateSpeciesPositions() {
-            speciesNodes.forEach(node => {
-                const species = node.userData.species;
-                const newPosition = positioner.calculateFlowerOfLifePosition(species.flowerOfLifePosition, currentDimension);
                 
-                const targetPosition = new THREE.Vector3(newPosition.x, newPosition.y, newPosition.z);
-                animateToPosition(node, targetPosition);
+                // Create connections
+                setTimeout(() => createConnectionLines(), 100);
+                updateSpeciesList();
+                
+                showNotification(`🌸 Loaded ${Object.keys(intelligenceVectors).length} species from Research App into sacred geometry!`);
+                
+            } catch (error) {
+                console.error('Error loading research data:', error);
+                showNotification("❌ Error loading research data. Please try again.");
+            }
+        }
+
+        function convertResearchDataToSacredGeometry(vector) {
+            // Convert 6-dimensional research data to our 12-dimensional sacred geometry
+            const dimensions = [
+                (vector.perceive || 0.5) * 12,           // 1. Sensory Awareness
+                (vector.perceive || 0.5) * 12,           // 2. Intuitive Reception
+                (vector.temporal || 0.5) * 12,           // 3. Temporal Perception
+                (vector.relate || 0.5) * 12,             // 4. Emotional Resonance
+                (vector.energetic || 0.5) * 12,          // 5. Energetic Attunement
+                (vector.relate || 0.5) * 12,             // 6. Environmental Consciousness
+                (vector.relate || 0.5) * 12,             // 7. Symbolic Communication
+                (vector.collective || 0.5) * 12,         // 8. Collaborative Intelligence
+                (vector.apply || 0.5) * 12,              // 9. Creative Innovation
+                (vector.apply || 0.5) * 12,              // 10. Healing Wisdom
+                (vector.adaptive || 0.5) * 12,           // 11. Teaching Capacity
+                (vector.complexity || 0.5) * 12          // 12. Evolutionary Contribution
+            ];
+            
+            // Assign Tesla frequency based on species characteristics
+            let frequency = 528; // Default transformation frequency
+            if (vector.collective > 0.8) frequency = 741; // High collective = intuition frequency
+            if (vector.uniqueness > 0.8) frequency = 963; // High uniqueness = unity frequency
+            if (vector.temporal > 0.8) frequency = 396;   // High temporal = liberation frequency
+            
+            // Assign color based on frequency
+            const colorMap = {
+                396: 0xff6b9d,  // Pink
+                528: 0x6bcf7f,  // Green
+                741: 0xc5a3ff,  // Purple
+                963: 0xffd700   // Gold
+            };
+            
+            return {
+                name: vector.species,
+                dimensions: dimensions,
+                frequency: frequency,
+                wisdomInsight: `${vector.species} demonstrates ${vector.complexity > 0.7 ? 'extraordinary' : 'remarkable'} consciousness across multiple intelligence dimensions.`,
+                color: colorMap[frequency]
+            };
+        }
+
+        function clearSpecies() {
+            speciesNodes.forEach(node => vectorEquilibrium.remove(node));
+            connectionLines.forEach(line => vectorEquilibrium.remove(line));
+            speciesNodes = [];
+            connectionLines = [];
+            updateSpeciesList();
+        }
+
+        function updateSpeciesList() {
+            const speciesList = document.getElementById('speciesList');
+            speciesList.innerHTML = '';
+            
+            speciesNodes.forEach((node, index) => {
+                const item = document.createElement('div');
+                item.className = 'species-item';
+                item.innerHTML = `
+                    <div style="font-weight: 600;">${node.userData.species}</div>
+                    <div style="font-size: 0.8em; opacity: 0.7;">${node.userData.frequency}Hz • ${TESLA_FREQUENCIES[node.userData.frequency]?.name || 'Sacred'}</div>
+                `;
+                item.onclick = () => focusOnSpecies(index);
+                speciesList.appendChild(item);
             });
         }
 
-        function animateToPosition(object, targetPosition) {
-            const startPosition = object.position.clone();
-            const duration = 1000;
+        function focusOnSpecies(index) {
+            const node = speciesNodes[index];
+            if (!node) return;
+            
+            // Smooth camera movement to focus on species
+            const targetPosition = node.position.clone().add(new THREE.Vector3(0, 0, 5));
+            animateCameraTo(targetPosition);
+            
+            // Show species information
+            showSpeciesInfo(node.userData);
+            
+            // Highlight the selected species
+            document.querySelectorAll('.species-item').forEach(item => item.classList.remove('selected'));
+            document.querySelectorAll('.species-item')[index].classList.add('selected');
+        }
+
+        function showSpeciesInfo(userData) {
+            const infoPanel = document.getElementById('infoPanel');
+            const infoTitle = document.getElementById('infoTitle');
+            const infoContent = document.getElementById('infoContent');
+            
+            infoTitle.textContent = userData.species;
+            infoContent.innerHTML = `
+                <div style="margin-bottom: 10px;"><strong>Wisdom:</strong> ${userData.wisdomInsight}</div>
+                <div style="margin-bottom: 10px;"><strong>Tesla Frequency:</strong> ${userData.frequency}Hz (${TESLA_FREQUENCIES[userData.frequency]?.name || 'Sacred'})</div>
+                <div><strong>Current Dimension Focus:</strong> ${SACRED_DIMENSIONS[currentDimension - 1].name}</div>
+                <div style="margin-top: 10px; font-size: 0.8em; opacity: 0.8;">${SACRED_DIMENSIONS[currentDimension - 1].description}</div>
+            `;
+            
+            infoPanel.classList.add('show');
+        }
+
+        function animateCameraTo(targetPosition) {
+            const startPosition = camera.position.clone();
+            const duration = 1000; // 1 second
             const startTime = Date.now();
-
-            function updatePosition() {
+            
+            function updateCamera() {
                 const elapsed = Date.now() - startTime;
                 const progress = Math.min(elapsed / duration, 1);
-                const easeProgress = 1 - Math.pow(1 - progress, 3);
+                const eased = 1 - Math.pow(1 - progress, 3); // Ease out cubic
                 
-                object.position.lerpVectors(startPosition, targetPosition, easeProgress);
+                camera.position.lerpVectors(startPosition, targetPosition, eased);
+                camera.lookAt(0, 0, 0);
                 
                 if (progress < 1) {
-                    requestAnimationFrame(updatePosition);
+                    requestAnimationFrame(updateCamera);
                 }
             }
             
-            updatePosition();
+            updateCamera();
         }
 
         function resetView() {
-            camera.position.set(0, 0, 20);
+            camera.position.set(0, 0, 15);
             camera.lookAt(0, 0, 0);
-            controls.reset();
-            currentDimension = 1;
-            updateDimensionDisplay();
-            updateSpeciesPositions();
-            closeModal();
+            vectorEquilibrium.rotation.set(0, 0, 0);
+            
+            // Hide species info
+            document.getElementById('infoPanel').classList.remove('show');
+            
+            showNotification("🌸 View reset to Flower of Life center");
         }
 
-        function animate() {
-            animationId = requestAnimationFrame(animate);
+        function toggleConnections() {
+            showConnections = !showConnections;
+            createConnectionLines();
             
-            controls.update();
-            
-            // Gentle rotation
-            scene.rotation.y += 0.0005;
-            
-            // Update node scales based on interaction
-            speciesNodes.forEach(node => {
-                const species = node.userData.species;
-                const isHovered = hoveredSpecies === species.id;
-                const isSelected = selectedSpecies === species.id;
-                const targetScale = isHovered ? 1.3 : (isSelected ? 1.2 : 1);
-                
-                node.scale.lerp(new THREE.Vector3(targetScale, targetScale, targetScale), 0.1);
-                
-                const glow = node.children[0];
-                if (glow) {
-                    glow.material.opacity = isHovered ? 0.3 : 0.1;
-                }
-            });
+            showNotification(showConnections ? "⚡ Connections enabled" : "⚡ Connections hidden");
+        }
 
+        function animateConstellation() {
+            if (animationRunning) return;
+            
+            animationRunning = true;
+            const duration = 6000; // 6 seconds for full Tesla 369 cycle
+            const startTime = Date.now();
+            
+            function teslaAnimation() {
+                const elapsed = Date.now() - startTime;
+                const progress = (elapsed % duration) / duration;
+                
+                // Tesla 3-6-9 rotation pattern
+                const rotation = progress * Math.PI * 2;
+                vectorEquilibrium.rotation.y = rotation;
+                vectorEquilibrium.rotation.x = Math.sin(rotation * 3) * 0.2; // 3x frequency
+                vectorEquilibrium.rotation.z = Math.cos(rotation * 6) * 0.1; // 6x frequency
+                
+                // Pulsing effect based on 9
+                const pulse = Math.sin(rotation * 9) * 0.1 + 1;
+                vectorEquilibrium.scale.setScalar(pulse);
+                
+                if (elapsed < duration) {
+                    requestAnimationFrame(teslaAnimation);
+                } else {
+                    animationRunning = false;
+                    vectorEquilibrium.scale.setScalar(1);
+                    showNotification("🌀 Tesla 369 animation complete");
+                }
+            }
+            
+            teslaAnimation();
+            showNotification("🌀 Tesla 369 animation started");
+        }
+
+        function exportConstellationData() {
+            const exportData = {
+                metadata: {
+                    title: "Integrated Intelligence Map - Sacred Geometry Export",
+                    generatedAt: new Date().toISOString(),
+                    speciesCount: speciesNodes.length,
+                    currentDimension: currentDimension,
+                    framework: "Vector Equilibrium Consciousness Mapping"
+                },
+                sacredDimensions: SACRED_DIMENSIONS,
+                teslaFrequencies: TESLA_FREQUENCIES,
+                species: speciesNodes.map(node => ({
+                    name: node.userData.species,
+                    dimensions: node.userData.dimensions,
+                    frequency: node.userData.frequency,
+                    position: {
+                        x: node.position.x,
+                        y: node.position.y,
+                        z: node.position.z
+                    },
+                    wisdomInsight: node.userData.wisdomInsight
+                })),
+                connections: connectionLines.length
+            };
+            
+            const dataStr = JSON.stringify(exportData, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `integrated-intelligence-map-${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+            
+            URL.revokeObjectURL(url);
+            showNotification("💾 Sacred geometry data exported successfully!");
+        }
+
+        function showNotification(message) {
+            // Create temporary notification
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: rgba(0, 0, 0, 0.9);
+                color: #6bcf7f;
+                padding: 15px 25px;
+                border-radius: 10px;
+                border: 1px solid #6bcf7f;
+                z-index: 1000;
+                font-family: 'Poppins', sans-serif;
+                font-weight: 500;
+                backdrop-filter: blur(10px);
+                animation: slideIn 0.3s ease-out;
+            `;
+            notification.textContent = message;
+            
+            // Add slide-in animation
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideIn {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            document.body.appendChild(notification);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                notification.style.animation = 'slideIn 0.3s ease-out reverse';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                    document.head.removeChild(style);
+                }, 300);
+            }, 3000);
+        }
+
+        // ====== ANIMATION LOOP ======
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            // Gentle rotation when not being manually controlled
+            if (!isMouseDown && !animationRunning) {
+                vectorEquilibrium.rotation.y += 0.002;
+            }
+            
+            // Pulse species nodes based on their Tesla frequencies
+            speciesNodes.forEach(node => {
+                const time = Date.now() * 0.001;
+                const pulseRate = node.userData.pulseRate || 0.5;
+                const pulse = Math.sin(time * pulseRate) * 0.1 + 1;
+                node.scale.setScalar(pulse);
+                
+                // Add subtle floating motion
+                const float = Math.sin(time * 0.5 + node.position.x) * 0.1;
+                node.position.y = node.userData.originalPosition.y + float;
+            });
+            
+            // Render the scene
             renderer.render(scene, camera);
         }
 
+        // ====== WINDOW RESIZE HANDLER ======
         function onWindowResize() {
-            const container = document.getElementById('threeMount');
-            camera.aspect = container.offsetWidth / container.offsetHeight;
+            camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
-            renderer.setSize(container.offsetWidth, container.offsetHeight);
+            renderer.setSize(window.innerWidth, window.innerHeight);
         }
 
-        // Initialize everything
-        window.addEventListener('load', () => {
-            initScene();
-            updateDimensionDisplay();
-            updateSpeciesCounter();
-            
-            // Auto-load from research agent if available
-            loadFromResearchAgent();
-        });
-
+        // ====== INITIALIZATION ======
+        window.addEventListener('load', initSacredGeometry);
         window.addEventListener('resize', onWindowResize);
 
-        window.addEventListener('beforeunload', () => {
-            if (animationId) {
-                cancelAnimationFrame(animationId);
-            }
-            if (renderer) {
-                renderer.dispose();
-            }
-        });
-
-        // Global function exports
+        // Make functions globally accessible
         window.changeDimension = changeDimension;
+        window.loadSampleData = loadSampleData;
+        window.loadFromResearchApp = loadFromResearchApp;
         window.resetView = resetView;
-        window.closeModal = closeModal;
-        window.addSpeciesToConstellation = addSpeciesToConstellation;
-        window.loadFromResearchAgent = loadFromResearchAgent;
-        window.syncWithMainApp = syncWithMainApp;
-        window.setVisualizationMode = setVisualizationMode;
-        window.toggleFrequencyVisualization = toggleFrequencyVisualization;
-        window.openInResearchAgent = openInResearchAgent;
+        window.toggleConnections = toggleConnections;
+        window.animateConstellation = animateConstellation;
+        window.exportConstellationData = exportConstellationData;
     </script>
 </body>
 </html>
