@@ -269,7 +269,7 @@
         }
 
         .insight-content {
-            font-size: 12px;
+            font-size: 11px;
             line-height: 1.4;
             color: #e2e8f0;
         }
@@ -507,6 +507,25 @@
             renderer.domElement.addEventListener('wheel', onMouseWheel);
             renderer.domElement.addEventListener('click', onMouseClick);
 
+            // Create hover label element
+            const hoverLabel = document.createElement('div');
+            hoverLabel.id = 'hoverLabel';
+            hoverLabel.style.cssText = `
+                position: fixed;
+                background: rgba(15, 23, 42, 0.9);
+                color: white;
+                padding: 8px 12px;
+                border-radius: 6px;
+                font-size: 14px;
+                font-weight: bold;
+                pointer-events: none;
+                z-index: 2000;
+                display: none;
+                border: 1px solid #3b82f6;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            `;
+            document.body.appendChild(hoverLabel);
+
             function onMouseDown(event) {
                 mouseDown = true;
                 mouseX = event.clientX;
@@ -514,13 +533,42 @@
             }
 
             function onMouseMove(event) {
-                if (!mouseDown) return;
-                const deltaX = event.clientX - mouseX;
-                const deltaY = event.clientY - mouseY;
-                targetRotationY += deltaX * 0.01;
-                targetRotationX += deltaY * 0.01;
-                mouseX = event.clientX;
-                mouseY = event.clientY;
+                if (mouseDown) {
+                    const deltaX = event.clientX - mouseX;
+                    const deltaY = event.clientY - mouseY;
+                    targetRotationY += deltaX * 0.01;
+                    targetRotationX += deltaY * 0.01;
+                    mouseX = event.clientX;
+                    mouseY = event.clientY;
+                } else {
+                    // Handle hover detection for species labels
+                    const raycaster = new THREE.Raycaster();
+                    const mouse = new THREE.Vector2();
+                    
+                    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+                    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+                    
+                    raycaster.setFromCamera(mouse, camera);
+                    
+                    const speciesNodes = species.map(s => s.node).filter(n => n);
+                    const intersects = raycaster.intersectObjects(speciesNodes);
+                    
+                    const hoverLabel = document.getElementById('hoverLabel');
+                    
+                    if (intersects.length > 0) {
+                        const hoveredSpecies = species.find(s => s.node === intersects[0].object);
+                        if (hoveredSpecies) {
+                            hoverLabel.textContent = hoveredSpecies.name;
+                            hoverLabel.style.display = 'block';
+                            hoverLabel.style.left = (event.clientX + 15) + 'px';
+                            hoverLabel.style.top = (event.clientY - 10) + 'px';
+                            document.body.style.cursor = 'pointer';
+                        }
+                    } else {
+                        hoverLabel.style.display = 'none';
+                        document.body.style.cursor = 'default';
+                    }
+                }
             }
 
             function onMouseUp() {
@@ -573,32 +621,40 @@
         function createVectorEquilibrium() {
             vectorEquilibrium = new THREE.Group();
 
-            // Create 12 vertices of vector equilibrium (cuboctahedron)
+            // Create proper Vector Equilibrium (Cuboctahedron) vertices
+            // 6 vertices of octahedron + 8 vertices of cube = 14 vertices total
+            // But we'll use 12 vertices for our 12 dimensions in proper sacred geometry
+            const sqrt2 = Math.sqrt(2);
             const vertices = [
-                // Square face vertices (4)
-                new THREE.Vector3(1, 1, 0), new THREE.Vector3(-1, 1, 0),
-                new THREE.Vector3(-1, -1, 0), new THREE.Vector3(1, -1, 0),
-                // Top vertices (4)
-                new THREE.Vector3(1, 0, 1), new THREE.Vector3(0, 1, 1),
-                new THREE.Vector3(-1, 0, 1), new THREE.Vector3(0, -1, 1),
-                // Bottom vertices (4)
-                new THREE.Vector3(1, 0, -1), new THREE.Vector3(0, 1, -1),
-                new THREE.Vector3(-1, 0, -1), new THREE.Vector3(0, -1, -1)
+                // Inner hexagon (6 vertices) - primary consciousness dimensions
+                new THREE.Vector3(3, 0, 0),     // East
+                new THREE.Vector3(1.5, 2.6, 0), // Northeast  
+                new THREE.Vector3(-1.5, 2.6, 0), // Northwest
+                new THREE.Vector3(-3, 0, 0),    // West
+                new THREE.Vector3(-1.5, -2.6, 0), // Southwest
+                new THREE.Vector3(1.5, -2.6, 0),  // Southeast
+                
+                // Outer hexagon (6 vertices) - expanded consciousness dimensions
+                new THREE.Vector3(2.1, 1.2, 2.5), // Upper Northeast
+                new THREE.Vector3(-2.1, 1.2, 2.5), // Upper Northwest
+                new THREE.Vector3(-2.1, -1.2, 2.5), // Upper Southwest
+                new THREE.Vector3(2.1, -1.2, 2.5), // Upper Southeast  
+                new THREE.Vector3(2.1, 1.2, -2.5), // Lower Northeast
+                new THREE.Vector3(-2.1, -1.2, -2.5) // Lower Southwest
             ];
 
-            // Scale vertices
-            vertices.forEach(v => v.multiplyScalar(3));
-
-            // Create edges
+            // Create proper Vector Equilibrium edges - sacred geometry connections
             const edges = [
-                [0,1], [1,2], [2,3], [3,0], // Square edges
-                [0,4], [0,8], [1,5], [1,9], [2,6], [2,10], [3,7], [3,11], // Vertical connections
-                [4,5], [5,6], [6,7], [7,4], // Top square
-                [8,9], [9,10], [10,11], [11,8], // Bottom square
-                [4,8], [5,9], [6,10], [7,11] // Connecting top and bottom
+                // Inner hexagon
+                [0,1], [1,2], [2,3], [3,4], [4,5], [5,0],
+                // Connecting inner to outer (creating triangular faces)
+                [0,6], [0,10], [1,6], [1,7], [2,7], [2,8], 
+                [3,8], [3,9], [4,9], [4,11], [5,11], [5,10],
+                // Outer connections
+                [6,7], [7,8], [8,9], [9,11], [11,10], [10,6]
             ];
 
-            // Draw edges
+            // Draw edges with sacred geometry styling
             edges.forEach(edge => {
                 const geometry = new THREE.BufferGeometry().setFromPoints([
                     vertices[edge[0]], vertices[edge[1]]
@@ -606,7 +662,8 @@
                 const material = new THREE.LineBasicMaterial({ 
                     color: 0x3b82f6, 
                     transparent: true, 
-                    opacity: 0.6 
+                    opacity: 0.4,
+                    linewidth: 1
                 });
                 const line = new THREE.Line(geometry, material);
                 vectorEquilibrium.add(line);
@@ -660,21 +717,29 @@
         }
 
         function calculateSacredPosition(speciesData, index) {
-            // Use flower of life positioning with dimensional focus
-            const goldenRatio = 1.618;
-            const radius = 4;
+            // Position species directly on Vector Equilibrium vertices
+            if (!vectorEquilibrium.vertices || index >= vectorEquilibrium.vertices.length) {
+                // Fallback to circular positioning if vertices not available
+                const angle = (index * 2 * Math.PI / species.length);
+                const radius = 4;
+                return new THREE.Vector3(
+                    Math.cos(angle) * radius,
+                    0,
+                    Math.sin(angle) * radius
+                );
+            }
             
-            // Emphasize positioning based on current dimension score
+            // Use actual Vector Equilibrium vertex positions
+            const vertex = vectorEquilibrium.vertices[index % vectorEquilibrium.vertices.length];
+            
+            // Add slight dimensional variation based on current dimension score
             const dimScore = speciesData.scores[currentDimension - 1];
-            const heightOffset = (dimScore - 70) / 30; // Normalize around average
-            
-            // Flower of life angle
-            const angle = (index * 2 * Math.PI / 6) + (currentDimension * Math.PI / 12);
+            const heightOffset = (dimScore - 75) / 50; // Subtle variation
             
             return new THREE.Vector3(
-                Math.cos(angle) * radius,
-                heightOffset * 2,
-                Math.sin(angle) * radius
+                vertex.x,
+                vertex.y + heightOffset,
+                vertex.z
             );
         }
 
@@ -688,50 +753,90 @@
             });
             connectionsToRemove.forEach(conn => vectorEquilibrium.remove(conn));
 
-            // Create new curved connections between similar species
+            // Create meaningful connections based on shared dimensional expertise
             for (let i = 0; i < species.length; i++) {
-                for (let j = i + 1; j < species.length; j++) {
-                    const similarity = calculateSimilarity(species[i], species[j]);
-                    if (similarity > 0.7) {
-                        createCurvedConnection(species[i], species[j], similarity);
+                const connections = findMeaningfulConnections(species[i], i);
+                connections.forEach(connection => {
+                    createDimensionalConnection(species[i], connection.species, connection.dimension, connection.strength);
+                });
+            }
+        }
+
+        function findMeaningfulConnections(targetSpecies, targetIndex) {
+            const connections = [];
+            
+            // Find top 2 dimensions for this species
+            const topDimensions = targetSpecies.scores
+                .map((score, index) => ({ dimension: index, score }))
+                .sort((a, b) => b.score - a.score)
+                .slice(0, 2);
+            
+            // For each top dimension, find other species that also excel in it
+            topDimensions.forEach(topDim => {
+                if (topDim.score < 80) return; // Only connect high-performing dimensions
+                
+                for (let j = 0; j < species.length; j++) {
+                    if (j === targetIndex) continue;
+                    
+                    const otherSpecies = species[j];
+                    const otherScore = otherSpecies.scores[topDim.dimension];
+                    
+                    // Connect if both species score 80+ in this dimension
+                    if (otherScore >= 80) {
+                        const avgScore = (topDim.score + otherScore) / 2;
+                        const strength = Math.min(avgScore / 100, 1);
+                        
+                        connections.push({
+                            species: otherSpecies,
+                            dimension: topDim.dimension,
+                            strength: strength
+                        });
                     }
                 }
-            }
+            });
+            
+            // Limit to 2 strongest connections per species to avoid visual clutter
+            return connections
+                .sort((a, b) => b.strength - a.strength)
+                .slice(0, 2);
         }
 
-        function calculateSimilarity(species1, species2) {
-            let totalDiff = 0;
-            for (let i = 0; i < 12; i++) {
-                totalDiff += Math.abs(species1.scores[i] - species2.scores[i]);
-            }
-            return Math.max(0, 1 - (totalDiff / 1200)); // Normalize to 0-1
-        }
-
-        function createCurvedConnection(species1, species2, similarity) {
+        function createDimensionalConnection(species1, species2, dimensionIndex, strength) {
             const start = species1.position;
             const end = species2.position;
             
-            // Create curved path using quadratic Bezier
+            // Create elegant curved path
             const midpoint = new THREE.Vector3().addVectors(start, end).multiplyScalar(0.5);
-            const perpendicular = new THREE.Vector3().crossVectors(
-                new THREE.Vector3().subVectors(end, start),
-                new THREE.Vector3(0, 1, 0)
-            ).normalize();
+            const distance = start.distanceTo(end);
             
-            const controlPoint = midpoint.clone().add(perpendicular.multiplyScalar(2 * similarity));
+            // Create control point for curve (higher for stronger connections)
+            const controlOffset = 1 + (strength * 2);
+            const perpendicular = new THREE.Vector3(0, controlOffset, 0);
+            const controlPoint = midpoint.clone().add(perpendicular);
             
             const curve = new THREE.QuadraticBezierCurve3(start, controlPoint, end);
-            const points = curve.getPoints(20);
+            const points = curve.getPoints(16);
             
             const geometry = new THREE.BufferGeometry().setFromPoints(points);
+            
+            // Color-code connections by dimension category
+            const dimensionColors = [
+                0x10b981, 0x3b82f6, 0x8b5cf6, 0xf59e0b, 0xec4899, 0x06b6d4, // Inner dimensions 1-6
+                0x84cc16, 0xf97316, 0x6366f1, 0x14b8a6, 0xf472b6, 0x22d3ee  // Outer dimensions 7-12
+            ];
+            
             const material = new THREE.LineBasicMaterial({
-                color: 0x10b981,
+                color: dimensionColors[dimensionIndex] || 0x10b981,
                 transparent: true,
-                opacity: similarity * 0.6
+                opacity: 0.6 * strength,
+                linewidth: 2
             });
             
             const connection = new THREE.Line(geometry, material);
             connection.userData.isConnection = true;
+            connection.userData.dimension = dimensions[dimensionIndex];
+            connection.userData.strength = strength;
+            
             vectorEquilibrium.add(connection);
         }
 
