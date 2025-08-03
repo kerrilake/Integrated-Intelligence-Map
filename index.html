@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Integrated Intelligence Map - Vector Equilibrium Consciousness</title>
+    <title>Integrated Intelligence Map - Sacred Geometry Consciousness</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
         body {
             margin: 0;
             padding: 0;
+            background: radial-gradient(circle at center, #0f1419 0%, #020617 100%);
             overflow: hidden;
-            background: linear-gradient(135deg, #0c0c1e 0%, #1a1a3a 50%, #0f0f2a 100%);
             font-family: 'Arial', sans-serif;
-            color: #ffffff;
+            position: relative;
         }
 
         #container {
@@ -21,879 +21,1089 @@
             position: relative;
         }
 
-        .info-panel {
-            position: absolute;
-            background: rgba(0, 20, 40, 0.85);
-            border: 1px solid #4a9eff;
-            border-radius: 10px;
+        .control-panel {
+            position: fixed;
+            background: rgba(15, 23, 42, 0.8);
+            border: 2px solid #3b82f6;
+            border-radius: 12px;
             padding: 15px;
-            color: #ffffff;
+            color: white;
             font-family: 'Arial', sans-serif;
-            max-width: 300px;
-            box-shadow: 0 4px 20px rgba(74, 158, 255, 0.3);
+            box-shadow: 0 4px 20px rgba(59, 130, 246, 0.3);
+            backdrop-filter: blur(10px);
             transition: all 0.3s ease;
             z-index: 1000;
         }
 
-        .info-panel.collapsed {
-            padding: 8px 12px;
-            background: rgba(0, 20, 40, 0.6);
-        }
-
         .panel-header {
+            cursor: pointer;
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 10px;
-            cursor: pointer;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(59, 130, 246, 0.3);
         }
 
-        .panel-content {
-            transition: all 0.3s ease;
-        }
-
-        .panel-content.hidden {
-            display: none;
+        .panel-header:hover {
+            color: #60a5fa;
         }
 
         .collapse-btn {
             background: none;
             border: none;
-            color: #4a9eff;
+            color: #60a5fa;
             font-size: 16px;
             cursor: pointer;
-            padding: 2px 6px;
-            border-radius: 3px;
-            transition: background 0.2s ease;
+            transition: all 0.2s ease;
         }
 
         .collapse-btn:hover {
-            background: rgba(74, 158, 255, 0.2);
+            color: #93c5fd;
+            transform: scale(1.1);
+        }
+
+        .panel-content {
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .panel-content.collapsed {
+            max-height: 0;
+            padding: 0;
+            opacity: 0;
+        }
+
+        #sacredNav {
+            top: 20px;
+            left: 20px;
+            width: 280px;
+        }
+
+        #speciesInfo {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 300px;
+            max-height: 400px;
+            background: rgba(15, 23, 42, 0.8);
+            border: 2px solid #3b82f6;
+            border-radius: 12px;
+            padding: 15px;
+            color: white;
+            font-family: 'Arial', sans-serif;
+            font-size: 12px;
+            box-shadow: 0 4px 20px rgba(59, 130, 246, 0.3);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            display: none;
+            overflow-y: auto;
+        }
+
+        #teslaPanel {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 280px;
+            max-height: 280px;
+            overflow-y: auto;
+        }
+
+        #intelligenceInsights {
+            position: fixed;     
+            bottom: 20px;
+            right: 20px;
+            width: 300px;
+            max-height: 280px;
+            background: rgba(15, 23, 42, 0.8);
+            border: 2px solid #3b82f6;
+            border-radius: 12px;
+            padding: 15px;
+            color: white;
+            font-family: 'Arial', sans-serif;
+            font-size: 12px;
+            box-shadow: 0 4px 20px rgba(59, 130, 246, 0.3);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            display: none;
+            overflow-y: auto;
         }
 
         .dimension-nav {
             display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
+            justify-content: space-between;
+            align-items: center;
+            margin: 10px 0;
         }
 
         .nav-btn {
-            background: #4a9eff;
+            background: linear-gradient(45deg, #3b82f6, #1d4ed8);
             border: none;
             color: white;
-            padding: 8px 12px;
-            border-radius: 5px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
             cursor: pointer;
-            transition: background 0.2s ease;
+            font-size: 20px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(59, 130, 246, 0.3);
         }
 
         .nav-btn:hover {
-            background: #6bb6ff;
+            background: linear-gradient(45deg, #60a5fa, #3b82f6);
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.5);
         }
 
         .action-btn {
             width: 100%;
-            padding: 8px 15px;
-            border-radius: 5px;
+            padding: 10px;
+            margin: 5px 0;
             border: none;
+            border-radius: 8px;
             cursor: pointer;
-            margin-bottom: 8px;
             font-weight: bold;
-            transition: all 0.2s ease;
+            font-size: 14px;
+            transition: all 0.3s ease;
         }
 
         .tesla-btn {
-            background: #ff6b9d;
+            background: linear-gradient(45deg, #ec4899, #be185d);
             color: white;
         }
 
         .tesla-btn:hover {
-            background: #ff85b3;
+            background: linear-gradient(45deg, #f472b6, #ec4899);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(236, 72, 153, 0.4);
         }
 
-        .sample-btn {
-            background: #45ff8a;
-            color: black;
+        .load-btn {
+            background: linear-gradient(45deg, #10b981, #059669);
+            color: white;
         }
 
-        .sample-btn:hover {
-            background: #6bff9f;
+        .load-btn:hover {
+            background: linear-gradient(45deg, #34d399, #10b981);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
         }
 
         .research-btn {
-            background: #ffa500;
-            color: black;
+            background: linear-gradient(45deg, #f59e0b, #d97706);
+            color: white;
         }
 
         .research-btn:hover {
-            background: #ffb733;
+            background: linear-gradient(45deg, #fbbf24, #f59e0b);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
         }
 
-        .frequency-item {
-            margin-bottom: 8px;
+        .frequency-legend {
+            margin-top: 15px;
+        }
+
+        .freq-item {
             display: flex;
             align-items: center;
-            gap: 8px;
+            margin: 8px 0;
+            font-size: 12px;
         }
 
-        .frequency-dot {
-            width: 12px;
-            height: 12px;
+        .freq-color {
+            width: 20px;
+            height: 20px;
             border-radius: 50%;
-            display: inline-block;
+            margin-right: 10px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .freq-396 { background: #ec4899; }
+        .freq-528 { background: #10b981; }
+        .freq-741 { background: #8b5cf6; }
+        .freq-963 { background: #f59e0b; }
+
+        #dimensionInfo {
+            text-align: center;
+            margin: 10px 0;
+            font-size: 14px;
+            color: #60a5fa;
+        }
+
+        .species-detail {
+            margin: 10px 0;
+            padding: 8px;
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 6px;
+            border-left: 3px solid #3b82f6;
+        }
+
+        .species-name {
+            font-weight: bold;
+            color: #60a5fa;
+            font-size: 14px;
+        }
+
+        .species-scores {
+            margin-top: 5px;
+            font-size: 11px;
+        }
+
+        .insight-section {
+            margin: 15px 0;
+            padding: 10px;
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 6px;
+            border-left: 3px solid #10b981;
+        }
+
+        .insight-title {
+            font-weight: bold;
+            color: #10b981;
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+
+        .insight-content {
+            font-size: 11px;
+            line-height: 1.4;
+            color: #e2e8f0;
+        }
+
+        .cosmic-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite ease-in-out;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        .loading-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #60a5fa;
+            font-size: 18px;
+            z-index: 2000;
+            text-align: center;
         }
     </style>
 </head>
 <body>
-    <div id="container">
-        <!-- Navigation Panel -->
-        <div id="navPanel" class="info-panel" style="top: 20px; left: 20px;">
-            <div class="panel-header" onclick="togglePanel('navPanel')">
-                <h3 style="margin: 0; color: #4a9eff;">🌀 Sacred Navigation</h3>
-                <button class="collapse-btn" id="navPanelBtn">−</button>
-            </div>
-            <div class="panel-content" id="navPanelContent">
-                <div style="margin-bottom: 15px;">
-                    <strong>Current Dimension:</strong><br>
-                    <span id="currentDimension" style="color: #4a9eff;">1. Sensory Awareness</span>
-                </div>
-                <div class="dimension-nav">
-                    <button class="nav-btn" onclick="changeDimension(-1)">−</button>
-                    <button class="nav-btn" onclick="changeDimension(1)">+</button>
-                </div>
-                <div style="margin-bottom: 15px;">
-                    <button class="action-btn tesla-btn" onclick="animateTesla369()">⚡ Tesla 369 Flow</button>
-                </div>
-                <div>
-                    <button class="action-btn sample-btn" onclick="loadSampleData()">🧬 Load Sample Data</button>
-                    <button class="action-btn research-btn" onclick="loadFromResearchApp()">📊 Load from Research App</button>
-                </div>
-            </div>
-        </div>
+    <div id="container"></div>
+    <div class="cosmic-background" id="cosmicBg"></div>
 
-        <!-- Species Info Panel -->
-        <div id="speciesPanel" class="info-panel" style="top: 20px; right: 20px; display: none;">
-            <div class="panel-header" onclick="togglePanel('speciesPanel')">
-                <h3 style="margin: 0; color: #4a9eff;">🐾 Species Wisdom</h3>
-                <button class="collapse-btn" id="speciesPanelBtn">−</button>
-            </div>
-            <div class="panel-content" id="speciesPanelContent">
-                <div id="speciesInfo">Click a species to explore its consciousness signature...</div>
-            </div>
+    <!-- Sacred Navigation Panel -->
+    <div class="control-panel" id="sacredNav">
+        <div class="panel-header" onclick="togglePanel('sacredNav')">
+            <span>🌀 Sacred Navigation</span>
+            <button class="collapse-btn" id="sacredNavBtn">−</button>
         </div>
-
-        <!-- Tesla Frequency Panel -->
-        <div id="frequencyPanel" class="info-panel" style="bottom: 20px; left: 20px;">
-            <div class="panel-header" onclick="togglePanel('frequencyPanel')">
-                <h3 style="margin: 0; color: #4a9eff;">⚡ Tesla Frequencies</h3>
-                <button class="collapse-btn" id="frequencyPanelBtn">−</button>
+        <div class="panel-content" id="sacredNavContent">
+            <div id="dimensionInfo">
+                <strong>Current Dimension:</strong><br>
+                <span id="currentDimension">1. Sensory Awareness</span>
             </div>
-            <div class="panel-content" id="frequencyPanelContent">
-                <div class="frequency-item">
-                    <div class="frequency-dot" style="background: #ff69b4;"></div>
+            
+            <div class="dimension-nav">
+                <button class="nav-btn" onclick="changeDimension(-1)">−</button>
+                <button class="nav-btn" onclick="changeDimension(1)">+</button>
+            </div>
+
+            <button class="action-btn tesla-btn" onclick="activateTesla369Flow()">
+                ⚡ Tesla 369 Flow
+            </button>
+
+            <button class="action-btn load-btn" onclick="loadSampleData()">
+                🧬 Load Sample Data
+            </button>
+
+            <button class="action-btn research-btn" onclick="loadFromResearchApp()">
+                📊 Load from Research App
+            </button>
+        </div>
+    </div>
+
+    <!-- Tesla Frequencies Panel -->
+    <div class="control-panel" id="teslaPanel">
+        <div class="panel-header" onclick="togglePanel('teslaPanel')">
+            <span>⚡ Tesla Frequencies</span>
+            <button class="collapse-btn" id="teslaPanelBtn">−</button>
+        </div>
+        <div class="panel-content" id="teslaPanelContent">
+            <div class="frequency-legend">
+                <div class="freq-item">
+                    <div class="freq-color freq-396"></div>
                     <span>396Hz Liberation</span>
                 </div>
-                <div class="frequency-item">
-                    <div class="frequency-dot" style="background: #32cd32;"></div>
+                <div class="freq-item">
+                    <div class="freq-color freq-528"></div>
                     <span>528Hz Love/DNA</span>
                 </div>
-                <div class="frequency-item">
-                    <div class="frequency-dot" style="background: #9370db;"></div>
+                <div class="freq-item">
+                    <div class="freq-color freq-741"></div>
                     <span>741Hz Intuition</span>
                 </div>
-                <div class="frequency-item">
-                    <div class="frequency-dot" style="background: #ffd700;"></div>
+                <div class="freq-item">
+                    <div class="freq-color freq-963"></div>
                     <span>963Hz Unity</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Plain English Insights Panel -->
-        <div id="insightsPanel" class="info-panel" style="bottom: 20px; right: 20px; display: none;">
-            <div class="panel-header" onclick="togglePanel('insightsPanel')">
-                <h3 style="margin: 0; color: #4a9eff;">🔍 Intelligence Insights</h3>
-                <button class="collapse-btn" id="insightsPanelBtn">−</button>
-            </div>
-            <div class="panel-content" id="insightsPanelContent">
-                <div id="insightsContent">
-                    <p style="color: #45ff8a; font-style: italic; margin: 0;">
-                        Click a species to discover how their intelligence patterns relate to other species and contribute to human understanding...
-                    </p>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Species Info Panel -->
+    <div id="speciesInfo">
+        <div class="panel-header" onclick="togglePanel('speciesInfo')">
+            <span>🐾 Species Wisdom</span>
+            <button class="collapse-btn" id="speciesInfoBtn">−</button>
+        </div>
+        <div class="panel-content" id="speciesInfoContent">
+            <div id="speciesDetails"></div>
+        </div>
+    </div>
+
+    <!-- Intelligence Insights Panel -->
+    <div id="intelligenceInsights">
+        <div class="panel-header" onclick="togglePanel('intelligenceInsights')">
+            <span>🔍 Intelligence Insights</span>
+            <button class="collapse-btn" id="intelligenceInsightsBtn">−</button>
+        </div>
+        <div class="panel-content" id="intelligenceInsightsContent">
+            <div id="insightDetails"></div>
+        </div>
+    </div>
+
     <script>
-        // Three.js Scene Setup
-        let scene, camera, renderer, vectorEquilibrium, particleSystem;
-        let species = [];
-        let connections = [];
-        let currentDimensionIndex = 0;
-        let teslaAnimation = null;
-        let raycaster, mouse;
+        // Global variables
+        let scene, camera, renderer, vectorEquilibrium, species = [], currentDimension = 1;
+        let teslaAnimation = false;
+        let cameraDistance = 15;
 
         // 12 Sacred Dimensions of Consciousness
         const dimensions = [
-            "1. Sensory Awareness",
-            "2. Intuitive Reception", 
-            "3. Temporal Perception",
-            "4. Emotional Resonance",
-            "5. Energetic Attunement",
-            "6. Environmental Consciousness",
-            "7. Symbolic Communication",
-            "8. Collaborative Intelligence", 
-            "9. Creative Innovation",
-            "10. Healing Wisdom",
-            "11. Teaching Capacity",
-            "12. Evolutionary Contribution"
+            "Sensory Awareness", "Intuitive Reception", "Temporal Perception",
+            "Emotional Resonance", "Energetic Attunement", "Environmental Consciousness",
+            "Symbolic Communication", "Collaborative Intelligence", "Creative Innovation",
+            "Healing Wisdom", "Teaching Capacity", "Evolutionary Contribution"
         ];
 
-        // Tesla Frequencies
-        const teslaFrequencies = {
-            396: { color: 0xff69b4, meaning: "Liberation/Transformation" },
-            528: { color: 0x32cd32, meaning: "Love/DNA Repair" },
-            741: { color: 0x9370db, meaning: "Intuition/Expression" },
-            963: { color: 0xffd700, meaning: "Unity/Transcendence" }
+        // Tesla frequency colors
+        const teslaColors = {
+            396: 0xec4899, // Liberation - Pink
+            528: 0x10b981, // Love/DNA - Green  
+            741: 0x8b5cf6, // Intuition - Purple
+            963: 0xf59e0b  // Unity - Gold
         };
 
-        // Vector Equilibrium Vertices (12 points in sacred geometry)
-        const vectorEquilibriumVertices = [
-            // Inner hexagon (foundation consciousness)
-            new THREE.Vector3(2, 0, 0),
-            new THREE.Vector3(1, Math.sqrt(3), 0),
-            new THREE.Vector3(-1, Math.sqrt(3), 0),
-            new THREE.Vector3(-2, 0, 0),
-            new THREE.Vector3(-1, -Math.sqrt(3), 0),
-            new THREE.Vector3(1, -Math.sqrt(3), 0),
-            // Outer hexagon (applied consciousness)
-            new THREE.Vector3(3, 0, 1.5),
-            new THREE.Vector3(1.5, 2.6, 1.5),
-            new THREE.Vector3(-1.5, 2.6, 1.5),
-            new THREE.Vector3(-3, 0, 1.5),
-            new THREE.Vector3(-1.5, -2.6, 1.5),
-            new THREE.Vector3(1.5, -2.6, 1.5)
+        // Sample species data
+        const sampleSpecies = [
+            {
+                name: "Dolphin",
+                scores: [95, 90, 85, 88, 92, 87, 80, 75, 70, 85, 80, 75],
+                teslaFreq: 528,
+                consciousness: "Highly developed sonar consciousness with deep empathic healing abilities"
+            },
+            {
+                name: "Honeybee",
+                scores: [85, 70, 95, 65, 80, 90, 90, 95, 85, 70, 85, 88],
+                teslaFreq: 963,
+                consciousness: "Collective intelligence with precise temporal and spatial awareness"
+            },
+            {
+                name: "Ancient Oak",
+                scores: [80, 85, 98, 75, 95, 98, 70, 80, 75, 90, 91, 96],
+                teslaFreq: 963,
+                consciousness: "Deep root network consciousness connecting forest ecosystems across time"
+            },
+            {
+                name: "Octopus",
+                scores: [98, 85, 80, 70, 75, 85, 85, 70, 95, 80, 75, 70],
+                teslaFreq: 396,
+                consciousness: "Highly adaptive problem-solving intelligence with camouflage mastery"
+            },
+            {
+                name: "Human",
+                scores: [75, 70, 65, 80, 60, 70, 95, 85, 90, 75, 85, 80],
+                teslaFreq: 396,
+                consciousness: "Abstract symbolic reasoning with complex social and creative capacities"
+            },
+            {
+                name: "Wolf",
+                scores: [90, 75, 80, 85, 85, 88, 75, 90, 70, 80, 82, 75],
+                teslaFreq: 741,
+                consciousness: "Pack intelligence with sophisticated social hierarchies and hunting strategies"
+            }
         ];
 
+        // Initialize the application
         function init() {
-            // Scene setup
+            createCosmicBackground();
+            setupThreeJS();
+            createVectorEquilibrium();
+            animate();
+            updateDimensionDisplay();
+        }
+
+        function createCosmicBackground() {
+            const bg = document.getElementById('cosmicBg');
+            for (let i = 0; i < 200; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.width = star.style.height = Math.random() * 3 + 1 + 'px';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                bg.appendChild(star);
+            }
+        }
+
+        function setupThreeJS() {
             scene = new THREE.Scene();
             camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.setClearColor(0x000000, 0);
             document.getElementById('container').appendChild(renderer.domElement);
 
-            // Raycaster for mouse interaction
-            raycaster = new THREE.Raycaster();
-            mouse = new THREE.Vector2();
+            camera.position.set(0, 0, cameraDistance);
 
-            // Create cosmic particle background
-            createParticleBackground();
+            // Add ambient light
+            const ambientLight = new THREE.AmbientLight(0x404040, 0.6);
+            scene.add(ambientLight);
 
-            // Create vector equilibrium framework
-            createVectorEquilibrium();
+            // Add directional light
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(10, 10, 5);
+            scene.add(directionalLight);
 
-            // Position camera
-            camera.position.set(8, 5, 8);
-            camera.lookAt(0, 0, 0);
+            // Mouse controls
+            let mouseDown = false, mouseX = 0, mouseY = 0;
+            let targetRotationX = 0, targetRotationY = 0;
+            let currentRotationX = 0, currentRotationY = 0;
 
-            // Event listeners
-            window.addEventListener('resize', onWindowResize);
+            renderer.domElement.addEventListener('mousedown', onMouseDown);
             renderer.domElement.addEventListener('mousemove', onMouseMove);
+            renderer.domElement.addEventListener('mouseup', onMouseUp);
+            renderer.domElement.addEventListener('wheel', onMouseWheel);
             renderer.domElement.addEventListener('click', onMouseClick);
 
-            // Mouse controls for rotation
-            let isMouseDown = false;
-            let mouseX = 0, mouseY = 0;
-
-            renderer.domElement.addEventListener('mousedown', (event) => {
-                isMouseDown = true;
+            function onMouseDown(event) {
+                mouseDown = true;
                 mouseX = event.clientX;
                 mouseY = event.clientY;
-            });
-
-            renderer.domElement.addEventListener('mouseup', () => {
-                isMouseDown = false;
-            });
-
-            renderer.domElement.addEventListener('mousemove', (event) => {
-                if (isMouseDown) {
-                    const deltaX = event.clientX - mouseX;
-                    const deltaY = event.clientY - mouseY;
-                    
-                    vectorEquilibrium.rotation.y += deltaX * 0.01;
-                    vectorEquilibrium.rotation.x += deltaY * 0.01;
-                    
-                    mouseX = event.clientX;
-                    mouseY = event.clientY;
-                }
-            });
-
-            // Zoom controls
-            renderer.domElement.addEventListener('wheel', (event) => {
-                camera.position.multiplyScalar(event.deltaY > 0 ? 1.1 : 0.9);
-            });
-
-            animate();
-        }
-
-        function createParticleBackground() {
-            const particleCount = 1000;
-            const particles = new THREE.BufferGeometry();
-            const positions = new Float32Array(particleCount * 3);
-
-            for (let i = 0; i < particleCount * 3; i += 3) {
-                positions[i] = (Math.random() - 0.5) * 50;
-                positions[i + 1] = (Math.random() - 0.5) * 50;
-                positions[i + 2] = (Math.random() - 0.5) * 50;
             }
 
-            particles.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            function onMouseMove(event) {
+                if (!mouseDown) return;
+                const deltaX = event.clientX - mouseX;
+                const deltaY = event.clientY - mouseY;
+                targetRotationY += deltaX * 0.01;
+                targetRotationX += deltaY * 0.01;
+                mouseX = event.clientX;
+                mouseY = event.clientY;
+            }
 
-            const particleMaterial = new THREE.PointsMaterial({
-                color: 0x4a9eff,
-                size: 0.1,
-                transparent: true,
-                opacity: 0.6
-            });
+            function onMouseUp() {
+                mouseDown = false;
+            }
 
-            particleSystem = new THREE.Points(particles, particleMaterial);
-            scene.add(particleSystem);
+            function onMouseWheel(event) {
+                cameraDistance += event.deltaY * 0.01;
+                cameraDistance = Math.max(5, Math.min(30, cameraDistance));
+                camera.position.set(0, 0, cameraDistance);
+            }
+
+            function onMouseClick(event) {
+                const raycaster = new THREE.Raycaster();
+                const mouse = new THREE.Vector2();
+                
+                mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+                mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+                
+                raycaster.setFromCamera(mouse, camera);
+                
+                const speciesNodes = species.map(s => s.node).filter(n => n);
+                const intersects = raycaster.intersectObjects(speciesNodes);
+                
+                if (intersects.length > 0) {
+                    const clickedSpecies = species.find(s => s.node === intersects[0].object);
+                    showSpeciesInfo(clickedSpecies);
+                }
+            }
+
+            // Smooth rotation
+            function updateRotation() {
+                currentRotationX += (targetRotationX - currentRotationX) * 0.1;
+                currentRotationY += (targetRotationY - currentRotationY) * 0.1;
+                
+                if (vectorEquilibrium) {
+                    vectorEquilibrium.rotation.x = currentRotationX;
+                    vectorEquilibrium.rotation.y = currentRotationY;
+                }
+            }
+
+            // Add to animation loop
+            const originalAnimate = animate;
+            animate = function() {
+                updateRotation();
+                originalAnimate();
+            };
         }
 
         function createVectorEquilibrium() {
             vectorEquilibrium = new THREE.Group();
 
-            // Create framework lines
-            const lineGeometry = new THREE.BufferGeometry();
-            const positions = [];
+            // Create 12 vertices of vector equilibrium (cuboctahedron)
+            const vertices = [
+                // Square face vertices (4)
+                new THREE.Vector3(1, 1, 0), new THREE.Vector3(-1, 1, 0),
+                new THREE.Vector3(-1, -1, 0), new THREE.Vector3(1, -1, 0),
+                // Top vertices (4)
+                new THREE.Vector3(1, 0, 1), new THREE.Vector3(0, 1, 1),
+                new THREE.Vector3(-1, 0, 1), new THREE.Vector3(0, -1, 1),
+                // Bottom vertices (4)
+                new THREE.Vector3(1, 0, -1), new THREE.Vector3(0, 1, -1),
+                new THREE.Vector3(-1, 0, -1), new THREE.Vector3(0, -1, -1)
+            ];
 
-            // Connect vertices to form vector equilibrium
-            for (let i = 0; i < 6; i++) {
-                // Inner hexagon
-                const next = (i + 1) % 6;
-                positions.push(...vectorEquilibriumVertices[i].toArray());
-                positions.push(...vectorEquilibriumVertices[next].toArray());
+            // Scale vertices
+            vertices.forEach(v => v.multiplyScalar(3));
 
-                // Outer hexagon
-                positions.push(...vectorEquilibriumVertices[i + 6].toArray());
-                positions.push(...vectorEquilibriumVertices[(next) + 6].toArray());
+            // Create edges
+            const edges = [
+                [0,1], [1,2], [2,3], [3,0], // Square edges
+                [0,4], [0,8], [1,5], [1,9], [2,6], [2,10], [3,7], [3,11], // Vertical connections
+                [4,5], [5,6], [6,7], [7,4], // Top square
+                [8,9], [9,10], [10,11], [11,8], // Bottom square
+                [4,8], [5,9], [6,10], [7,11] // Connecting top and bottom
+            ];
 
-                // Connecting inner to outer
-                positions.push(...vectorEquilibriumVertices[i].toArray());
-                positions.push(...vectorEquilibriumVertices[i + 6].toArray());
-            }
-
-            lineGeometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
-
-            const lineMaterial = new THREE.LineBasicMaterial({
-                color: 0x4a9eff,
-                transparent: true,
-                opacity: 0.3
+            // Draw edges
+            edges.forEach(edge => {
+                const geometry = new THREE.BufferGeometry().setFromPoints([
+                    vertices[edge[0]], vertices[edge[1]]
+                ]);
+                const material = new THREE.LineBasicMaterial({ 
+                    color: 0x3b82f6, 
+                    transparent: true, 
+                    opacity: 0.6 
+                });
+                const line = new THREE.Line(geometry, material);
+                vectorEquilibrium.add(line);
             });
 
-            const framework = new THREE.LineSegments(lineGeometry, lineMaterial);
-            vectorEquilibrium.add(framework);
-
+            // Store vertices for species positioning
+            vectorEquilibrium.vertices = vertices;
             scene.add(vectorEquilibrium);
         }
 
-        function createSpeciesNode(speciesData, position) {
-            const group = new THREE.Group();
+        function loadSampleData() {
+            clearSpecies();
+            
+            sampleSpecies.forEach((speciesData, index) => {
+                const speciesObj = createSpecies(speciesData, index);
+                species.push(speciesObj);
+            });
+            
+            createConnections();
+            console.log('Sample data loaded:', species.length, 'species');
+        }
 
-            // Determine Tesla frequency and color
-            const frequencies = Object.keys(teslaFrequencies).map(Number);
-            const signature = speciesData.dimensions.reduce((sum, val) => sum + val, 0);
-            const freqIndex = signature % frequencies.length;
-            const frequency = frequencies[freqIndex];
-            const color = teslaFrequencies[frequency].color;
-
-            // Create pulsing sphere
-            const geometry = new THREE.SphereGeometry(0.2, 16, 16);
-            const material = new THREE.MeshBasicMaterial({
+        function createSpecies(speciesData, index) {
+            // Position based on flower of life pattern and current dimension focus
+            const position = calculateSacredPosition(speciesData, index);
+            
+            // Create visual node
+            const geometry = new THREE.SphereGeometry(0.3, 16, 16);
+            const color = teslaColors[speciesData.teslaFreq];
+            const material = new THREE.MeshPhongMaterial({ 
                 color: color,
                 transparent: true,
                 opacity: 0.8
             });
-
-            const sphere = new THREE.Mesh(geometry, material);
-            group.add(sphere);
-
-            // Create label
-            const canvas = document.createElement('canvas');
-            const context = canvas.getContext('2d');
-            canvas.width = 256;
-            canvas.height = 64;
-            context.fillStyle = '#ffffff';
-            context.font = '24px Arial';
-            context.textAlign = 'center';
-            context.fillText(speciesData.name, 128, 40);
-
-            const texture = new THREE.CanvasTexture(canvas);
-            const labelMaterial = new THREE.SpriteMaterial({ map: texture });
-            const label = new THREE.Sprite(labelMaterial);
-            label.scale.set(2, 0.5, 1);
-            label.position.y = 0.5;
-            group.add(label);
-
-            group.position.copy(position);
-            group.userData = speciesData;
-
-            // Tesla frequency pulsing
-            group.userData.pulsePhase = Math.random() * Math.PI * 2;
-            group.userData.frequency = frequency;
-
-            return group;
-        }
-
-        function positionSpeciesOnFlowerOfLife(speciesData) {
-            // Use consciousness signature to determine position
-            const signature = speciesData.dimensions[currentDimensionIndex] || 6;
-            const angle = (signature / 12) * Math.PI * 2;
-            const radius = 2 + (signature / 12) * 2;
-
-            const vertex = vectorEquilibriumVertices[currentDimensionIndex];
-            const offset = new THREE.Vector3(
-                Math.cos(angle) * radius * 0.3,
-                Math.sin(angle) * radius * 0.3,
-                (signature - 6) * 0.2
-            );
-
-            return vertex.clone().add(offset);
-        }
-
-        function createCurvedConnection(species1, species2) {
-            const start = species1.position.clone();
-            const end = species2.position.clone();
             
-            // Create curved path using quadratic curve
-            const mid = start.clone().add(end).multiplyScalar(0.5);
-            mid.y += 1; // Curve upward
-
-            const curve = new THREE.QuadraticBezierCurve3(start, mid, end);
-            const points = curve.getPoints(20);
-            const geometry = new THREE.BufferGeometry().setFromPoints(points);
-
-            const material = new THREE.LineBasicMaterial({
-                color: 0x4a9eff,
-                transparent: true,
-                opacity: 0.4
-            });
-
-            return new THREE.Line(geometry, material);
+            const node = new THREE.Mesh(geometry, material);
+            node.position.copy(position);
+            
+            // Pulsing animation based on Tesla frequency
+            const freq = speciesData.teslaFreq;
+            node.userData.originalScale = 1;
+            node.userData.pulseSpeed = freq / 200;
+            
+            vectorEquilibrium.add(node);
+            
+            return {
+                ...speciesData,
+                node: node,
+                position: position
+            };
         }
 
-        function updateSpeciesPositions() {
-            species.forEach(speciesNode => {
-                const newPosition = positionSpeciesOnFlowerOfLife(speciesNode.userData);
-                speciesNode.position.copy(newPosition);
-            });
+        function calculateSacredPosition(speciesData, index) {
+            // Use flower of life positioning with dimensional focus
+            const goldenRatio = 1.618;
+            const radius = 4;
+            
+            // Emphasize positioning based on current dimension score
+            const dimScore = speciesData.scores[currentDimension - 1];
+            const heightOffset = (dimScore - 70) / 30; // Normalize around average
+            
+            // Flower of life angle
+            const angle = (index * 2 * Math.PI / 6) + (currentDimension * Math.PI / 12);
+            
+            return new THREE.Vector3(
+                Math.cos(angle) * radius,
+                heightOffset * 2,
+                Math.sin(angle) * radius
+            );
+        }
 
-            // Update connections
-            connections.forEach(connection => {
-                vectorEquilibrium.remove(connection);
+        function createConnections() {
+            // Remove existing connections
+            const connectionsToRemove = [];
+            vectorEquilibrium.children.forEach(child => {
+                if (child.userData && child.userData.isConnection) {
+                    connectionsToRemove.push(child);
+                }
             });
-            connections = [];
+            connectionsToRemove.forEach(conn => vectorEquilibrium.remove(conn));
 
-            // Create new connections based on consciousness similarity
+            // Create new curved connections between similar species
             for (let i = 0; i < species.length; i++) {
                 for (let j = i + 1; j < species.length; j++) {
-                    const similarity = calculateConsciousnessSimilarity(
-                        species[i].userData,
-                        species[j].userData
-                    );
-                    
-                    if (similarity > 0.6) {
-                        const connection = createCurvedConnection(species[i], species[j]);
-                        connections.push(connection);
-                        vectorEquilibrium.add(connection);
+                    const similarity = calculateSimilarity(species[i], species[j]);
+                    if (similarity > 0.7) {
+                        createCurvedConnection(species[i], species[j], similarity);
                     }
                 }
             }
         }
 
-        function calculateConsciousnessSimilarity(species1, species2) {
-            let similarity = 0;
+        function calculateSimilarity(species1, species2) {
+            let totalDiff = 0;
             for (let i = 0; i < 12; i++) {
-                const diff = Math.abs((species1.dimensions[i] || 6) - (species2.dimensions[i] || 6));
-                similarity += (12 - diff) / 12;
+                totalDiff += Math.abs(species1.scores[i] - species2.scores[i]);
             }
-            return similarity / 12;
+            return Math.max(0, 1 - (totalDiff / 1200)); // Normalize to 0-1
         }
 
-        function changeDimension(direction) {
-            currentDimensionIndex += direction;
-            if (currentDimensionIndex < 0) currentDimensionIndex = 11;
-            if (currentDimensionIndex > 11) currentDimensionIndex = 0;
-
-            document.getElementById('currentDimension').textContent = dimensions[currentDimensionIndex];
-            updateSpeciesPositions();
-        }
-
-        function animateTesla369() {
-            let rotationSpeed = 0.02;
-            let duration = 3000; // 3 seconds
-            let startTime = Date.now();
-
-            function animate369() {
-                const elapsed = Date.now() - startTime;
-                const progress = elapsed / duration;
-
-                if (progress < 1) {
-                    vectorEquilibrium.rotation.y += rotationSpeed * (1 + Math.sin(progress * Math.PI * 6));
-                    teslaAnimation = requestAnimationFrame(animate369);
-                } else {
-                    teslaAnimation = null;
-                }
-            }
-
-            if (teslaAnimation) {
-                cancelAnimationFrame(teslaAnimation);
-            }
-            animate369();
-        }
-
-        function loadSampleData() {
-            // Clear existing species
-            species.forEach(node => vectorEquilibrium.remove(node));
-            species = [];
-            connections.forEach(connection => vectorEquilibrium.remove(connection));
-            connections = [];
-
-            // Sample consciousness data
-            const sampleSpecies = [
-                {
-                    name: "Dolphin",
-                    dimensions: [9, 11, 8, 10, 11, 9, 8, 10, 7, 8, 6, 7]
-                },
-                {
-                    name: "Honeybee",
-                    dimensions: [7, 6, 9, 5, 8, 11, 6, 12, 9, 7, 8, 10]
-                },
-                {
-                    name: "Ancient Oak",
-                    dimensions: [8, 7, 12, 6, 9, 12, 4, 6, 8, 11, 9, 11]
-                },
-                {
-                    name: "Octopus",
-                    dimensions: [10, 8, 7, 7, 6, 8, 9, 5, 11, 6, 7, 5]
-                },
-                {
-                    name: "Human",
-                    dimensions: [7, 5, 6, 8, 4, 7, 11, 9, 10, 7, 10, 8]
-                },
-                {
-                    name: "Wolf",
-                    dimensions: [11, 8, 8, 11, 9, 10, 7, 11, 8, 6, 9, 7]
-                }
-            ];
-
-            // Create species nodes
-            sampleSpecies.forEach(speciesData => {
-                const position = positionSpeciesOnFlowerOfLife(speciesData);
-                const node = createSpeciesNode(speciesData, position);
-                species.push(node);
-                vectorEquilibrium.add(node);
+        function createCurvedConnection(species1, species2, similarity) {
+            const start = species1.position;
+            const end = species2.position;
+            
+            // Create curved path using quadratic Bezier
+            const midpoint = new THREE.Vector3().addVectors(start, end).multiplyScalar(0.5);
+            const perpendicular = new THREE.Vector3().crossVectors(
+                new THREE.Vector3().subVectors(end, start),
+                new THREE.Vector3(0, 1, 0)
+            ).normalize();
+            
+            const controlPoint = midpoint.clone().add(perpendicular.multiplyScalar(2 * similarity));
+            
+            const curve = new THREE.QuadraticBezierCurve3(start, controlPoint, end);
+            const points = curve.getPoints(20);
+            
+            const geometry = new THREE.BufferGeometry().setFromPoints(points);
+            const material = new THREE.LineBasicMaterial({
+                color: 0x10b981,
+                transparent: true,
+                opacity: similarity * 0.6
             });
-
-            updateSpeciesPositions();
-        }
-
-        function loadFromResearchApp() {
-            // Try to load data from localStorage (Research App integration)
-            try {
-                const researchData = localStorage.getItem('speciesResearchData');
-                if (researchData) {
-                    const data = JSON.parse(researchData);
-                    // Convert research app data to 12-dimensional format
-                    // This would be customized based on your Research App's data structure
-                    console.log('Loaded from Research App:', data);
-                    alert('Research App data loaded! (Check console for details)');
-                } else {
-                    alert('No data found from Research App. Please research a species first!');
-                }
-            } catch (error) {
-                console.error('Error loading Research App data:', error);
-                alert('Error loading Research App data. Please try again.');
-            }
-        }
-
-        function onMouseMove(event) {
-            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-        }
-
-        function onMouseClick(event) {
-            raycaster.setFromCamera(mouse, camera);
-            const intersects = raycaster.intersectObjects(species, true);
-
-            if (intersects.length > 0) {
-                const speciesNode = intersects[0].object.parent;
-                const speciesData = speciesNode.userData;
-                
-                showSpeciesInfo(speciesData);
-            }
+            
+            const connection = new THREE.Line(geometry, material);
+            connection.userData.isConnection = true;
+            vectorEquilibrium.add(connection);
         }
 
         function showSpeciesInfo(speciesData) {
-            const panel = document.getElementById('speciesPanel');
-            const info = document.getElementById('speciesInfo');
-            const insightsPanel = document.getElementById('insightsPanel');
-            const insightsContent = document.getElementById('insightsContent');
+            const panel = document.getElementById('speciesInfo');
+            const details = document.getElementById('speciesDetails');
+            const insightsPanel = document.getElementById('intelligenceInsights');
+            const insightDetails = document.getElementById('insightDetails');
             
-            let html = `<h4>${speciesData.name}</h4>`;
-            html += `<p><strong>Consciousness Signature:</strong></p>`;
+            // Show species wisdom panel
+            details.innerHTML = `
+                <div class="species-detail">
+                    <div class="species-name">${speciesData.name}</div>
+                    <div style="margin: 8px 0; font-style: italic; color: #10b981;">
+                        ${speciesData.consciousness}
+                    </div>
+                    <div class="species-scores">
+                        Tesla Frequency: ${speciesData.teslaFreq}Hz<br>
+                        ${dimensions.map((dim, i) => 
+                            `<strong>${dim}:</strong> ${speciesData.scores[i]}/12`
+                        ).join('<br>')}
+                    </div>
+                </div>
+            `;
             
-            for (let i = 0; i < 12; i++) {
-                const value = speciesData.dimensions[i] || 6;
-                html += `<div style="margin-bottom: 5px;">
-                    <span style="color: #4a9eff;">${dimensions[i]}</span><br>
-                    <span style="color: #45ff8a;">${value}/12</span>
-                </div>`;
-            }
-
-            info.innerHTML = html;
-            panel.style.display = 'block';
-
-            // Generate Plain English Insights
+            // Generate and show intelligence insights
             const insights = generateSpeciesInsights(speciesData);
-            insightsContent.innerHTML = insights;
+            insightDetails.innerHTML = insights;
+            
+            panel.style.display = 'block';
             insightsPanel.style.display = 'block';
         }
 
         function generateSpeciesInsights(speciesData) {
-            const name = speciesData.name;
-            const dims = speciesData.dimensions;
+            let insights = '';
             
-            // Calculate key strengths (dimensions > 8)
-            const strengths = [];
-            const applications = [];
-            const relationships = [];
+            // Key Intelligence Strengths
+            insights += '<div class="insight-section">';
+            insights += '<div class="insight-title">🧠 Key Intelligence Strengths:</div>';
+            insights += '<div class="insight-content">';
             
-            dims.forEach((value, index) => {
-                if (value > 8) {
-                    strengths.push({
-                        dimension: dimensions[index],
-                        value: value,
-                        index: index
-                    });
-                }
+            // Find top 3 dimensional scores
+            const topDimensions = speciesData.scores
+                .map((score, index) => ({ dimension: dimensions[index], score, index }))
+                .sort((a, b) => b.score - a.score)
+                .slice(0, 3);
+            
+            topDimensions.forEach(dim => {
+                const interpretation = getDimensionInterpretation(dim.dimension, dim.score);
+                insights += `<strong>${dim.dimension} (${dim.score}/12)</strong><br>${interpretation}<br><br>`;
             });
-
-            // Generate insights based on dimensional patterns
-            let insights = `<h4 style="color: #4a9eff; margin-top: 0;">🔍 ${name} Intelligence Insights</h4>`;
             
-            if (strengths.length > 0) {
-                insights += `<div style="margin-bottom: 15px;">
-                    <strong style="color: #45ff8a;">Key Intelligence Strengths:</strong><br>`;
-                
-                strengths.forEach(strength => {
-                    const interpretation = getDimensionInterpretation(strength.index, strength.value, name);
-                    insights += `<div style="margin: 8px 0; padding: 8px; background: rgba(74, 158, 255, 0.1); border-radius: 5px;">
-                        <span style="color: #4a9eff;">${strength.dimension.split('.')[1]}</span> (${strength.value}/12)<br>
-                        <span style="font-size: 0.9em;">${interpretation}</span>
-                    </div>`;
-                });
-                insights += `</div>`;
-            }
-
-            // Relationship insights with other species
-            const relationshipInsights = getRelationshipInsights(speciesData);
-            if (relationshipInsights.length > 0) {
-                insights += `<div style="margin-bottom: 15px;">
-                    <strong style="color: #45ff8a;">Consciousness Relationships:</strong><br>`;
-                
-                relationshipInsights.forEach(rel => {
-                    insights += `<div style="margin: 8px 0; padding: 8px; background: rgba(69, 255, 138, 0.1); border-radius: 5px;">
-                        <strong>${rel.species}</strong><br>
-                        <span style="font-size: 0.9em;">${rel.insight}</span>
-                    </div>`;
-                });
-                insights += `</div>`;
-            }
-
-            // Human relevance
-            const humanRelevance = getHumanRelevance(speciesData);
-            insights += `<div style="margin-bottom: 10px;">
-                <strong style="color: #45ff8a;">Relevance for Humans:</strong><br>
-                <div style="margin: 8px 0; padding: 8px; background: rgba(255, 255, 255, 0.05); border-radius: 5px;">
-                    <span style="font-size: 0.9em;">${humanRelevance}</span>
-                </div>
-            </div>`;
-
+            insights += '</div></div>';
+            
+            // Consciousness Relationships
+            insights += '<div class="insight-section">';
+            insights += '<div class="insight-title">🌐 Consciousness Relationships:</div>';
+            insights += '<div class="insight-content">';
+            
+            // Find similar species based on top dimensions
+            const relationships = findRelatedSpecies(speciesData);
+            relationships.forEach(rel => {
+                insights += `<strong>${rel.species}</strong><br>Shares ${rel.commonDimension} consciousness, suggesting potential for ${rel.collaboration}.<br><br>`;
+            });
+            
+            insights += '</div></div>';
+            
+            // Relevance for Humans
+            insights += '<div class="insight-section">';
+            insights += '<div class="insight-title">🌟 Relevance for Humans:</div>';
+            insights += '<div class="insight-content">';
+            insights += getHumanRelevance(speciesData);
+            insights += '</div></div>';
+            
             return insights;
         }
 
-        function getRelationshipInsights(speciesData) {
-            const relationships = [];
-            const currentSpecies = speciesData.name;
+        function getDimensionInterpretation(dimension, score) {
+            const interpretations = {
+                "Sensory Awareness": "demonstrates exceptional sensory processing abilities, perceiving environmental information beyond typical ranges",
+                "Intuitive Reception": "shows remarkable intuitive intelligence, processing non-linear information and subtle environmental cues",
+                "Temporal Perception": "exhibits advanced time consciousness, understanding past/future relationships and cyclical patterns",
+                "Emotional Resonance": "displays deep emotional intelligence and empathic connection capabilities",
+                "Energetic Attunement": "demonstrates sensitivity to energy fields and vibrational frequencies",
+                "Environmental Consciousness": "shows profound awareness of ecological relationships and environmental interdependence",
+                "Symbolic Communication": "exhibits sophisticated communication through symbols, patterns, and abstract concepts",
+                "Collaborative Intelligence": "demonstrates exceptional group problem-solving and collective decision-making abilities",
+                "Creative Innovation": "shows remarkable creative problem-solving and adaptive innovation capabilities",
+                "Healing Wisdom": "demonstrates natural healing abilities and therapeutic consciousness",
+                "Teaching Capacity": "exhibits exceptional ability to transmit knowledge and skills across species",
+                "Evolutionary Contribution": "demonstrates profound contribution to consciousness evolution and species development"
+            };
             
-            species.forEach(otherSpeciesNode => {
-                const otherSpecies = otherSpeciesNode.userData;
-                if (otherSpecies.name === currentSpecies) return;
+            return `${speciesData.name} ${interpretations[dimension] || "shows unique consciousness patterns in this dimension"}.`;
+        }
+
+        function findRelatedSpecies(targetSpecies) {
+            const relationships = [];
+            const topDims = targetSpecies.scores
+                .map((score, index) => ({ dimension: dimensions[index], score, index }))
+                .sort((a, b) => b.score - a.score)
+                .slice(0, 2);
+            
+            species.forEach(otherSpecies => {
+                if (otherSpecies.name === targetSpecies.name) return;
                 
-                const similarity = calculateConsciousnessSimilarity(speciesData, otherSpecies);
-                if (similarity > 0.6) {
-                    const sharedStrengths = findSharedStrengths(speciesData, otherSpecies);
-                    if (sharedStrengths.length > 0) {
+                topDims.forEach(dim => {
+                    if (otherSpecies.scores[dim.index] >= 80) {
+                        const collaborationType = getCollaborationType(dim.dimension);
                         relationships.push({
                             species: otherSpecies.name,
-                            insight: `Shares ${sharedStrengths[0]} consciousness, suggesting potential for ${getCollaborationInsight(sharedStrengths[0])}.`
+                            commonDimension: dim.dimension,
+                            collaboration: collaborationType
                         });
                     }
-                }
+                });
             });
             
             return relationships.slice(0, 2); // Limit to top 2 relationships
         }
 
-        function findSharedStrengths(species1, species2) {
-            const shared = [];
-            for (let i = 0; i < 12; i++) {
-                if ((species1.dimensions[i] || 6) > 8 && (species2.dimensions[i] || 6) > 8) {
-                    shared.push(dimensions[i].split('.')[1]);
-                }
-            }
-            return shared;
-        }
-
-        function getCollaborationInsight(sharedDimension) {
+        function getCollaborationType(dimension) {
             const collaborations = {
-                "Sensory Awareness": "environmental monitoring and detection partnerships",
-                "Intuitive Reception": "telepathic communication and energy healing",
-                "Temporal Perception": "predictive abilities and time-sensitive coordination",
-                "Emotional Resonance": "therapeutic relationships and emotional support",
-                "Energetic Attunement": "vibrational healing and frequency-based communication",
+                "Sensory Awareness": "environmental monitoring and early warning systems",
+                "Intuitive Reception": "intuitive problem-solving partnerships",
+                "Temporal Perception": "long-term planning and forecasting collaborations",
+                "Emotional Resonance": "emotional healing and therapeutic partnerships",
+                "Energetic Attunement": "energy healing and vibrational medicine applications",
                 "Environmental Consciousness": "ecosystem restoration and conservation efforts",
-                "Symbolic Communication": "cross-species language development and artistic collaboration",
-                "Collaborative Intelligence": "group problem-solving and collective decision-making",
-                "Creative Innovation": "biomimicry research and technological advancement",
-                "Healing Wisdom": "integrative medicine and therapeutic applications",
-                "Teaching Capacity": "educational partnerships and knowledge transfer",
-                "Evolutionary Contribution": "consciousness evolution and species advancement"
+                "Symbolic Communication": "cross-species communication bridge development",
+                "Collaborative Intelligence": "group problem-solving and decision-making partnerships",
+                "Creative Innovation": "innovative solution development and creative projects",
+                "Healing Wisdom": "therapeutic and healing methodology development",
+                "Teaching Capacity": "educational and knowledge transfer programs",
+                "Evolutionary Contribution": "consciousness evolution and species advancement initiatives"
             };
-            return collaborations[sharedDimension] || "mutual learning and consciousness expansion";
+            
+            return collaborations[dimension] || "mutual learning and consciousness expansion";
         }
 
         function getHumanRelevance(speciesData) {
-            const name = speciesData.name;
-            const dims = speciesData.dimensions;
-            
-            // Find top 2 dimensions
-            const sortedDims = dims.map((val, idx) => ({value: val, index: idx}))
-                                  .sort((a, b) => b.value - a.value)
-                                  .slice(0, 2);
+            const topDim = speciesData.scores
+                .map((score, index) => ({ dimension: dimensions[index], score, index }))
+                .sort((a, b) => b.score - a.score)[0];
             
             const relevanceMap = {
-                0: "enhanced sensory awareness techniques for human healing and environmental connection",
-                1: "developing intuitive communication skills and non-linear information processing",
-                2: "understanding time perception for better health prediction and life planning",
-                3: "emotional intelligence development and empathic connection practices",
-                4: "energy healing methodologies and vibrational medicine applications",
-                5: "ecosystem consciousness for sustainable living and environmental stewardship",
-                6: "non-verbal communication systems and symbolic language development",
-                7: "collective intelligence models for group decision-making and community building",
-                8: "biomimicry innovations for technological and creative problem-solving",
-                9: "integrative healing approaches combining traditional and alternative medicine",
-                10: "educational methodologies that honor different learning styles and intelligences",
-                11: "consciousness evolution practices for individual and species development"
+                "Sensory Awareness": "insights into developing enhanced sensory technologies and mindfulness practices for better environmental awareness",
+                "Intuitive Reception": "wisdom about accessing intuitive intelligence and non-linear problem-solving approaches in business and personal development",
+                "Temporal Perception": "understanding time perception for better health prediction and life planning, challenging linear time concepts",
+                "Emotional Resonance": "lessons in emotional intelligence development and empathic communication for improved relationships and leadership",
+                "Energetic Attunement": "insights into energy healing methodologies and vibrational medicine applications for holistic health",
+                "Environmental Consciousness": "wisdom about sustainable living practices and ecological interdependence for environmental restoration",
+                "Symbolic Communication": "understanding non-verbal communication and symbolic thinking for enhanced creativity and cross-cultural understanding",
+                "Collaborative Intelligence": "lessons in collective problem-solving and group dynamics for improved teamwork and organizational effectiveness",
+                "Creative Innovation": "insights into adaptive thinking and innovative problem-solving for technological and artistic advancement",
+                "Healing Wisdom": "understanding natural healing principles and therapeutic consciousness for integrative medicine approaches",
+                "Teaching Capacity": "wisdom about knowledge transmission and skill development for educational methodology advancement",
+                "Evolutionary Contribution": "insights into consciousness evolution and species development for human potential advancement"
             };
             
-            const topRelevance = relevanceMap[sortedDims[0].index];
-            return `${name}'s consciousness pattern offers humans insights into ${topRelevance}. This challenges us to expand beyond human-centric intelligence definitions and recognize the profound wisdom available through interspecies relationships.`;
+            return `${speciesData.name}'s consciousness pattern offers humans ${relevanceMap[topDim.dimension]}. This challenges us to expand beyond human-centric intelligence definitions and recognize the profound wisdom available through interspecies relationships.`;
         }
 
-
-
-        function getDimensionInterpretation(dimensionIndex, value, speciesName) {
-            const interpretations = {
-                0: `${speciesName} demonstrates exceptional sensory processing abilities, perceiving environmental information beyond typical human ranges.`,
-                1: `${speciesName} shows remarkable intuitive reception capabilities, accessing non-linear information through quantum consciousness fields.`,
-                2: `${speciesName} exhibits advanced temporal perception, potentially sensing past/future events and cyclical patterns.`,
-                3: `${speciesName} displays profound emotional resonance, capable of deep empathic connections across species boundaries.`,
-                4: `${speciesName} demonstrates strong energetic attunement, naturally aligning with environmental and cosmic frequencies.`,
-                5: `${speciesName} exhibits exceptional environmental consciousness, understanding complex ecosystem relationships and spatial dynamics.`,
-                6: `${speciesName} shows advanced symbolic communication abilities, using non-verbal systems to convey complex information.`,
-                7: `${speciesName} demonstrates remarkable collaborative intelligence, functioning effectively in group consciousness networks.`,
-                8: `${speciesName} exhibits extraordinary creative innovation, developing novel solutions and adaptive strategies.`,
-                9: `${speciesName} displays significant healing wisdom, naturally understanding therapeutic and restorative processes.`,
-                10: `${speciesName} shows exceptional teaching capacity, effectively transmitting knowledge and skills across species.`,
-                11: `${speciesName} demonstrates profound evolutionary contribution, actively advancing consciousness development.`
-            };
+        function changeDimension(direction) {
+            currentDimension += direction;
+            if (currentDimension < 1) currentDimension = 12;
+            if (currentDimension > 12) currentDimension = 1;
             
-            return interpretations[dimensionIndex] || `${speciesName} shows strength in this consciousness dimension.`;
+            updateDimensionDisplay();
+            repositionSpecies();
         }
 
-        function getHumanRelevance(speciesData) {
-            const name = speciesData.name;
-            const dims = speciesData.dimensions;
+        function updateDimensionDisplay() {
+            document.getElementById('currentDimension').textContent = 
+                `${currentDimension}. ${dimensions[currentDimension - 1]}`;
+        }
+
+        function repositionSpecies() {
+            species.forEach((speciesData, index) => {
+                const newPosition = calculateSacredPosition(speciesData, index);
+                speciesData.position = newPosition;
+                
+                if (speciesData.node) {
+                    // Animate to new position
+                    const startPos = speciesData.node.position.clone();
+                    const duration = 1000; // 1 second
+                    const startTime = Date.now();
+                    
+                    function animatePosition() {
+                        const elapsed = Date.now() - startTime;
+                        const progress = Math.min(elapsed / duration, 1);
+                        const easeProgress = 1 - Math.pow(1 - progress, 3); // Ease out cubic
+                        
+                        speciesData.node.position.lerpVectors(startPos, newPosition, easeProgress);
+                        
+                        if (progress < 1) {
+                            requestAnimationFrame(animatePosition);
+                        }
+                    }
+                    
+                    animatePosition();
+                }
+            });
             
-            // Find top dimension
-            const topDimIndex = dims.indexOf(Math.max(...dims));
+            // Recreate connections after repositioning
+            setTimeout(() => createConnections(), 1100);
+        }
+
+        function activateTesla369Flow() {
+            teslaAnimation = !teslaAnimation;
+            const btn = document.querySelector('.tesla-btn');
             
-            const relevanceMap = {
-                0: "enhanced sensory awareness techniques for human healing and environmental connection",
-                1: "developing intuitive communication skills and non-linear information processing",
-                2: "understanding time perception for better health prediction and life planning", 
-                3: "emotional intelligence development and empathic connection practices",
-                4: "energy healing methodologies and vibrational medicine applications",
-                5: "ecosystem consciousness for sustainable living and environmental stewardship",
-                6: "non-verbal communication systems and symbolic language development",
-                7: "collective intelligence models for group decision-making and community building",
-                8: "biomimicry innovations for technological and creative problem-solving",
-                9: "integrative healing approaches combining traditional and alternative medicine",
-                10: "educational methodologies that honor different learning styles and intelligences",
-                11: "consciousness evolution practices for individual and species development"
+            if (teslaAnimation) {
+                btn.textContent = '⚡ Stop Tesla Flow';
+                btn.style.background = 'linear-gradient(45deg, #dc2626, #991b1b)';
+            } else {
+                btn.textContent = '⚡ Tesla 369 Flow';
+                btn.style.background = 'linear-gradient(45deg, #ec4899, #be185d)';
+            }
+        }
+
+        function loadFromResearchApp() {
+            try {
+                const researchData = localStorage.getItem('speciesResearchData');
+                if (!researchData) {
+                    alert('No data found from Research App. Please complete some species research first!');
+                    return;
+                }
+                
+                const data = JSON.parse(researchData);
+                clearSpecies();
+                
+                // Convert research data to sacred geometry format
+                Object.values(data).forEach((speciesData, index) => {
+                    const sacredSpecies = convertToSacredFormat(speciesData, index);
+                    if (sacredSpecies) {
+                        const speciesObj = createSpecies(sacredSpecies, index);
+                        species.push(speciesObj);
+                    }
+                });
+                
+                createConnections();
+                console.log('Loaded', species.length, 'species from Research App');
+                
+            } catch (error) {
+                console.error('Error loading from Research App:', error);
+                alert('Error loading data from Research App');
+            }
+        }
+
+        function convertToSacredFormat(researchData, index) {
+            if (!researchData.scores) return null;
+            
+            // Convert 6-dimensional research data to 12-dimensional sacred geometry
+            const researchScores = researchData.scores;
+            const sacredScores = [
+                researchScores[0] || 70, // Sensory -> Sensory Awareness
+                Math.round((researchScores[1] + researchScores[0]) / 2), // Intuitive Reception
+                researchScores[2] || 70, // Temporal -> Temporal Perception
+                researchScores[3] || 70, // Emotional -> Emotional Resonance
+                Math.round((researchScores[4] + researchScores[1]) / 2), // Energetic Attunement
+                researchScores[5] || 70, // Environmental -> Environmental Consciousness
+                Math.round((researchScores[0] + researchScores[3]) / 2), // Symbolic Communication
+                researchScores[4] || 70, // Collaborative -> Collaborative Intelligence
+                Math.round((researchScores[1] + researchScores[2]) / 2), // Creative Innovation
+                Math.round((researchScores[3] + researchScores[5]) / 2), // Healing Wisdom
+                Math.round((researchScores[4] + researchScores[0]) / 2), // Teaching Capacity
+                Math.round((researchScores[5] + researchScores[2]) / 2)  // Evolutionary Contribution
+            ];
+            
+            // Assign Tesla frequency based on consciousness signature
+            let teslaFreq = 528; // Default
+            const avgScore = sacredScores.reduce((a, b) => a + b, 0) / 12;
+            if (avgScore > 85) teslaFreq = 963; // Unity
+            else if (avgScore > 75) teslaFreq = 741; // Intuition
+            else if (avgScore < 65) teslaFreq = 396; // Liberation
+            
+            return {
+                name: researchData.name || `Species ${index + 1}`,
+                scores: sacredScores,
+                teslaFreq: teslaFreq,
+                consciousness: researchData.consciousness || "Consciousness pattern derived from research analysis"
             };
+        }
+
+        function clearSpecies() {
+            // Remove species nodes from scene
+            species.forEach(s => {
+                if (s.node) {
+                    vectorEquilibrium.remove(s.node);
+                }
+            });
             
-            const topRelevance = relevanceMap[topDimIndex];
-            return `${name}'s consciousness pattern offers humans insights into ${topRelevance}. This challenges us to expand beyond human-centric intelligence definitions and recognize the profound wisdom available through interspecies relationships.`;
+            // Clear connections
+            const connectionsToRemove = [];
+            vectorEquilibrium.children.forEach(child => {
+                if (child.userData && child.userData.isConnection) {
+                    connectionsToRemove.push(child);
+                }
+            });
+            connectionsToRemove.forEach(conn => vectorEquilibrium.remove(conn));
+            
+            species = [];
+            
+            // Hide info panels
+            document.getElementById('speciesInfo').style.display = 'none';
+            document.getElementById('intelligenceInsights').style.display = 'none';
         }
 
         function togglePanel(panelId) {
-            const panel = document.getElementById(panelId);
             const content = document.getElementById(panelId + 'Content');
             const btn = document.getElementById(panelId + 'Btn');
             
-            if (content.classList.contains('hidden')) {
-                content.classList.remove('hidden');
-                panel.classList.remove('collapsed');
+            if (content.classList.contains('collapsed')) {
+                content.classList.remove('collapsed');
                 btn.textContent = '−';
             } else {
-                content.classList.add('hidden');
-                panel.classList.add('collapsed');
+                content.classList.add('collapsed');
                 btn.textContent = '+';
             }
         }
 
         function animate() {
             requestAnimationFrame(animate);
-
-            // Tesla frequency pulsing for species nodes
-            species.forEach(node => {
-                const time = Date.now() * 0.001;
-                const pulseRate = node.userData.frequency / 1000; // Convert Hz to animation rate
-                const pulse = Math.sin(time * pulseRate + node.userData.pulsePhase) * 0.1 + 1;
-                node.children[0].scale.setScalar(pulse);
+            
+            // Tesla frequency pulsing animation
+            species.forEach(speciesData => {
+                if (speciesData.node) {
+                    const time = Date.now() * 0.001;
+                    const pulseSpeed = speciesData.node.userData.pulseSpeed;
+                    
+                    if (teslaAnimation) {
+                        // Enhanced pulsing during Tesla flow
+                        const scale = 1 + Math.sin(time * pulseSpeed * 3) * 0.3;
+                        speciesData.node.scale.setScalar(scale);
+                        
+                        // Color pulsing
+                        const intensity = 0.5 + Math.sin(time * pulseSpeed * 2) * 0.5;
+                        speciesData.node.material.opacity = intensity;
+                    } else {
+                        // Gentle pulsing
+                        const scale = 1 + Math.sin(time * pulseSpeed) * 0.1;
+                        speciesData.node.scale.setScalar(scale);
+                        speciesData.node.material.opacity = 0.8;
+                    }
+                }
             });
-
-            // Gentle particle rotation
-            if (particleSystem) {
-                particleSystem.rotation.y += 0.0005;
+            
+            // Gentle rotation of vector equilibrium
+            if (vectorEquilibrium && !teslaAnimation) {
+                vectorEquilibrium.rotation.y += 0.002;
             }
-
+            
+            if (teslaAnimation && vectorEquilibrium) {
+                // Tesla 369 flow rotation
+                const time = Date.now() * 0.001;
+                vectorEquilibrium.rotation.y = Math.sin(time * 0.369) * 0.1;
+                vectorEquilibrium.rotation.x = Math.cos(time * 0.369) * 0.05;
+            }
+            
             renderer.render(scene, camera);
         }
 
-        function onWindowResize() {
+        // Handle window resize
+        window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
-        }
+        });
 
         // Initialize the application
-        window.addEventListener('load', init);
+        init();
     </script>
 </body>
 </html>
