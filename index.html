@@ -780,7 +780,7 @@
                 .slice(0, 3);
             
             topDimensions.forEach(dim => {
-                const interpretation = getDimensionInterpretation(dim.dimension, dim.score);
+                const interpretation = getDimensionInterpretation(dim.dimension, dim.score, speciesData.name);
                 insights += `<strong>${dim.dimension} (${dim.score}/12)</strong><br>${interpretation}<br><br>`;
             });
             
@@ -809,7 +809,7 @@
             return insights;
         }
 
-        function getDimensionInterpretation(dimension, score) {
+        function getDimensionInterpretation(dimension, score, speciesName) {
             const interpretations = {
                 "Sensory Awareness": "demonstrates exceptional sensory processing abilities, perceiving environmental information beyond typical ranges",
                 "Intuitive Reception": "shows remarkable intuitive intelligence, processing non-linear information and subtle environmental cues",
@@ -825,7 +825,7 @@
                 "Evolutionary Contribution": "demonstrates profound contribution to consciousness evolution and species development"
             };
             
-            return `${speciesData.name} ${interpretations[dimension] || "shows unique consciousness patterns in this dimension"}.`;
+            return `${speciesName} ${interpretations[dimension] || "shows unique consciousness patterns in this dimension"}.`;
         }
 
         function findRelatedSpecies(targetSpecies) {
