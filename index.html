@@ -689,7 +689,7 @@
                     <strong style="color: #45ff8a;">Key Intelligence Strengths:</strong><br>`;
                 
                 strengths.forEach(strength => {
-                    const interpretation = getdimensionInterpretation(strength.index, strength.value, name);
+                    const interpretation = getDimensionInterpretation(strength.index, strength.value, name);
                     insights += `<div style="margin: 8px 0; padding: 8px; background: rgba(74, 158, 255, 0.1); border-radius: 5px;">
                         <span style="color: #4a9eff;">${strength.dimension.split('.')[1]}</span> (${strength.value}/12)<br>
                         <span style="font-size: 0.9em;">${interpretation}</span>
