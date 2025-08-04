@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vector Equilibrium Consciousness Synthesizer</title>
+    <title>Living Flower of Life Consciousness Map</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -29,7 +29,7 @@
         .header {
             text-align: center;
             margin-bottom: 30px;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.95);
             padding: 30px;
             border-radius: 20px;
             box-shadow: 0 8px 32px rgba(0,0,0,0.1);
@@ -45,7 +45,77 @@
         .header p {
             color: #34495e;
             font-size: 1.1em;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
+        }
+
+        .header .subtitle {
+            background: linear-gradient(135deg, #3498db, #9b59b6);
+            color: white;
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 500;
+            display: inline-block;
+        }
+
+        .interaction-guide {
+            text-align: center;
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .interaction-guide h3 {
+            color: #2980b9;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .interaction-guide p {
+            color: #34495e;
+            font-size: 1em;
+        }
+
+        .selected-species {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+            min-height: 60px;
+            align-items: center;
+        }
+
+        .species-badge {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .species-badge:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+        }
+
+        .species-badge .remove {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
         }
 
         .controls {
@@ -53,11 +123,11 @@
             flex-wrap: wrap;
             gap: 15px;
             justify-content: center;
-            margin: 30px 0;
+            margin: 20px 0;
         }
 
         .control-button {
-            background: linear-gradient(135deg, #3498db, #2980b9);
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
             color: white;
             border: none;
             padding: 12px 24px;
@@ -66,12 +136,12 @@
             font-family: 'Poppins', sans-serif;
             font-weight: 500;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
         }
 
         .control-button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+            box-shadow: 0 6px 20px rgba(39, 174, 96, 0.4);
         }
 
         .control-button:active {
@@ -80,22 +150,23 @@
 
         .visualization-container {
             position: relative;
-            height: 600px;
-            background: rgba(255, 255, 255, 0.95);
+            height: 700px;
+            background: rgba(255, 255, 255, 0.98);
             border-radius: 20px;
             box-shadow: 0 8px 32px rgba(0,0,0,0.1);
             margin: 20px 0;
             overflow: hidden;
         }
 
-        #vectorEquilibriumCanvas {
+        #flowerOfLifeCanvas {
             width: 100%;
             height: 100%;
             border-radius: 20px;
+            cursor: pointer;
         }
 
         .analysis-panel {
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255, 255, 255, 0.98);
             border-radius: 20px;
             padding: 30px;
             margin: 20px 0;
@@ -105,101 +176,68 @@
 
         .analysis-panel.active {
             display: block;
-            animation: slideIn 0.5s ease-out;
+            animation: slideIn 0.6s ease-out;
         }
 
         @keyframes slideIn {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .analysis-title {
-            font-size: 1.8em;
-            color: #2980b9;
-            margin-bottom: 20px;
-            font-weight: 600;
-            text-align: center;
-        }
-
-        .species-relationship {
-            background: rgba(52, 152, 219, 0.1);
+        .insight-section {
+            margin: 25px 0;
+            padding: 25px;
+            border-radius: 15px;
+            background: rgba(52, 152, 219, 0.05);
             border-left: 4px solid #3498db;
-            padding: 20px;
-            margin: 15px 0;
-            border-radius: 8px;
         }
 
-        .species-relationship h4 {
+        .insight-section h4 {
             color: #2980b9;
+            margin-bottom: 15px;
+            font-weight: 600;
+            font-size: 1.2em;
+        }
+
+        .insight-section p {
+            line-height: 1.7;
+            color: #34495e;
+        }
+
+        .species-comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .comparison-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .comparison-card h5 {
+            color: #8e44ad;
             margin-bottom: 10px;
             font-weight: 600;
         }
 
-        .frequency-info {
-            background: rgba(142, 68, 173, 0.1);
-            border-left: 4px solid #8e44ad;
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 8px;
-        }
-
-        .geometric-insight {
-            background: rgba(39, 174, 96, 0.1);
-            border-left: 4px solid #27ae60;
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 8px;
-        }
-
-        .wisdom-insight {
-            background: rgba(230, 126, 34, 0.1);
-            border-left: 4px solid #e67e22;
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 8px;
-            font-style: italic;
-        }
-
-        .research-controls {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin: 20px 0;
-        }
-
-        .research-checkbox {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(255, 255, 255, 0.8);
-            padding: 10px 15px;
-            border-radius: 15px;
-            border: 2px solid transparent;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .research-checkbox:hover {
-            border-color: #3498db;
-            background: rgba(255, 255, 255, 1);
-        }
-
-        .research-checkbox input[type="checkbox"] {
-            cursor: pointer;
-        }
-
         .tooltip {
             position: absolute;
-            background: rgba(44, 62, 80, 0.9);
+            background: rgba(44, 62, 80, 0.95);
             color: white;
-            padding: 8px 12px;
-            border-radius: 8px;
+            padding: 10px 15px;
+            border-radius: 10px;
             font-size: 14px;
             font-weight: 500;
             pointer-events: none;
             z-index: 1000;
             display: none;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            max-width: 200px;
+            text-align: center;
         }
 
         .category-legend {
@@ -209,8 +247,9 @@
             gap: 20px;
             margin: 20px 0;
             padding: 20px;
-            background: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.9);
             border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
         .legend-item {
@@ -226,14 +265,33 @@
             border-radius: 50%;
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .visualization-container {
+                height: 500px;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>🌀 Vector Equilibrium Consciousness Synthesizer</h1>
-            <p>Dynamic Geometric Consciousness Mapping Using Sacred Geometry & Tesla Frequencies</p>
-            <p style="font-size: 0.9em; color: #7f8c8d;">Exploring which combinations of intelligence types create thriving ecosystems</p>
+            <h1>🌸 Living Flower of Life Consciousness Map</h1>
+            <p>Explore the Sacred Geometry of Intelligence Across All Species</p>
+            <div class="subtitle">Click on Species to Discover Intelligence Relationships</div>
+        </div>
+
+        <div class="interaction-guide">
+            <h3>🎯 How to Explore</h3>
+            <p>Click on the glowing species circles to select up to 4 different forms of consciousness. Watch as the sacred geometry reveals their relationships!</p>
         </div>
 
         <div class="category-legend">
@@ -255,35 +313,17 @@
             </div>
         </div>
 
-        <div class="controls">
-            <button class="control-button" onclick="loadEcosystemTrio()">🔺 Ecosystem Trio</button>
-            <button class="control-button" onclick="loadEcosystemQuad()">⬜ Ecosystem Quad</button>
-            <button class="control-button" onclick="loadComplexEcosystem()">⬢ Complex Ecosystem</button>
-            <button class="control-button" onclick="resetVisualization()">🔄 Reset View</button>
-            <button class="control-button" onclick="loadFromRedefinigApp()">📚 Load from Redefining Intelligence App</button>
+        <div class="selected-species" id="selectedSpecies">
+            <p style="color: #7f8c8d; font-style: italic;">Select species to begin exploring their intelligence relationships...</p>
         </div>
 
-        <div class="research-controls">
-            <label class="research-checkbox">
-                <input type="checkbox" id="showSimilarTypes" onchange="updateAnalysis()">
-                <span>Find Similar Intelligence Types</span>
-            </label>
-            <label class="research-checkbox">
-                <input type="checkbox" id="showUniversalPatterns" onchange="updateAnalysis()">
-                <span>Show Universal Patterns</span>
-            </label>
-            <label class="research-checkbox">
-                <input type="checkbox" id="showCrossEcosystem" onchange="updateAnalysis()">
-                <span>Cross-Ecosystem Matches</span>
-            </label>
-            <label class="research-checkbox">
-                <input type="checkbox" id="showCompatibility" onchange="updateAnalysis()">
-                <span>Compatibility Matrix</span>
-            </label>
+        <div class="controls">
+            <button class="control-button" onclick="clearSelection()">🔄 Clear Selection</button>
+            <button class="control-button" onclick="loadFromRedefinigApp()">📚 Connect to Research Database</button>
         </div>
 
         <div class="visualization-container">
-            <canvas id="vectorEquilibriumCanvas"></canvas>
+            <canvas id="flowerOfLifeCanvas"></canvas>
             <div class="tooltip" id="tooltip"></div>
         </div>
 
@@ -293,95 +333,148 @@
     </div>
 
     <script>
-        // Species database with AI Consciousness Bridge categories
+        // Enhanced species database with wisdom insights
         const speciesDatabase = {
             // Aquatic Intelligence (🌊)
-            dolphin: { name: 'Dolphin', category: 'aquatic', color: 0x3498db, icon: '🐬' },
-            whale: { name: 'Whale', category: 'aquatic', color: 0x2980b9, icon: '🐋' },
-            coral: { name: 'Coral Reef', category: 'aquatic', color: 0x1abc9c, icon: '🪸' },
+            dolphin: { 
+                name: 'Dolphin', 
+                category: 'aquatic', 
+                color: 0x3498db, 
+                icon: '🐬',
+                wisdom: 'Sonar communication masters who invite humans to remember energetic frequency awareness',
+                intelligence: 'Echolocation creates 3D sound-maps of environment, demonstrating that intelligence can literally reshape perception of reality'
+            },
+            whale: { 
+                name: 'Whale', 
+                category: 'aquatic', 
+                color: 0x2980b9, 
+                icon: '🐋',
+                wisdom: 'Ancient ocean memory keepers whose songs carry generational Earth wisdom across vast distances',
+                intelligence: 'Ultra-low frequency communication networks span entire ocean basins, maintaining cultural knowledge across centuries'
+            },
+            coral: { 
+                name: 'Coral Reef', 
+                category: 'aquatic', 
+                color: 0x1abc9c, 
+                icon: '🪸',
+                wisdom: 'Collaborative ecosystem architects whose symbiotic relationships create underwater cities',
+                intelligence: 'Collective organism intelligence coordinates thousands of individual polyps in synchronized spawning and growth patterns'
+            },
             
             // Land & Air Wisdom (🏞️)
-            dog: { name: 'Dog', category: 'terrestrial', color: 0x27ae60, icon: '🐕' },
-            horse: { name: 'Horse', category: 'terrestrial', color: 0x2ecc71, icon: '🐴' },
-            cow: { name: 'Cow', category: 'terrestrial', color: 0x58d68d, icon: '🐄' },
-            bee: { name: 'Honeybee', category: 'terrestrial', color: 0xf1c40f, icon: '🐝' },
-            crow: { name: 'Crow', category: 'terrestrial', color: 0x34495e, icon: '🦅' },
+            dog: { 
+                name: 'Dog', 
+                category: 'terrestrial', 
+                color: 0x27ae60, 
+                icon: '🐕',
+                wisdom: 'Heart-centered loyalty teachers who demonstrate unconditional love through moment-by-moment presence',
+                intelligence: 'Emotional intelligence reads human micro-expressions and heart-rate variations, responding with precise empathetic support'
+            },
+            horse: { 
+                name: 'Horse', 
+                category: 'terrestrial', 
+                color: 0x2ecc71, 
+                icon: '🐴',
+                wisdom: 'Partnership consciousness masters who demonstrate authentic collaboration through energetic sensitivity',
+                intelligence: 'Bioenergetic field sensitivity detects human intention and emotional state before physical cues, enabling true energetic partnership'
+            },
+            cow: { 
+                name: 'Cow', 
+                category: 'terrestrial', 
+                color: 0x58d68d, 
+                icon: '🐄',
+                wisdom: 'Gentle earth wisdom keepers who embody peaceful presence and grounded community care',
+                intelligence: 'Herd consciousness maintains social harmony through subtle body language and group decision-making processes'
+            },
+            bee: { 
+                name: 'Honeybee', 
+                category: 'terrestrial', 
+                color: 0xf1c40f, 
+                icon: '🐝',
+                wisdom: 'Collective intelligence coordinators whose waggle dance communications encode complex environmental information',
+                intelligence: 'Geometric communication system converts distance, direction, and resource quality into precise mathematical dance patterns'
+            },
+            crow: { 
+                name: 'Crow', 
+                category: 'terrestrial', 
+                color: 0x34495e, 
+                icon: '🦅',
+                wisdom: 'Problem-solving innovators with cultural transmission abilities, demonstrating tool use and memory across generations',
+                intelligence: 'Cultural learning creates cumulative intelligence where innovations spread through populations and persist across generations'
+            },
             
             // Living Networks (🌱)
-            tree: { name: 'Ancient Oak', category: 'networks', color: 0x8e44ad, icon: '🌳' },
-            mycelium: { name: 'Mycelium Network', category: 'networks', color: 0x9b59b6, icon: '🍄' },
-            riparian: { name: 'Riparian Forest', category: 'networks', color: 0xaf7ac5, icon: '🌲' },
+            tree: { 
+                name: 'Ancient Oak', 
+                category: 'networks', 
+                color: 0x8e44ad, 
+                icon: '🌳',
+                wisdom: 'Mycorrhizal network communicators who share resources and information through underground fungal connections',
+                intelligence: 'Chemical communication networks span entire forests, sharing nutrients, warnings, and information through fungal partnerships'
+            },
+            mycelium: { 
+                name: 'Mycelium Network', 
+                category: 'networks', 
+                color: 0x9b59b6, 
+                icon: '🍄',
+                wisdom: 'Underground intelligence networks that connect entire ecosystems through chemical communication',
+                intelligence: 'Distributed computing network processes environmental information and coordinates resource distribution across vast ecological areas'
+            },
+            riparian: { 
+                name: 'Riparian Forest', 
+                category: 'networks', 
+                color: 0xaf7ac5, 
+                icon: '🌲',
+                wisdom: 'Water-land bridge ecosystems that demonstrate boundary consciousness and integration of different realms',
+                intelligence: 'Filtering intelligence purifies water while creating habitat corridors that connect aquatic and terrestrial ecosystems'
+            },
             
             // Earth Elements (💎)
-            crystal: { name: 'Crystal', category: 'elemental', color: 0xe67e22, icon: '💎' }
+            crystal: { 
+                name: 'Crystal', 
+                category: 'elemental', 
+                color: 0xe67e22, 
+                icon: '💎',
+                wisdom: 'Geological consciousness holders whose atomic lattice structures store and transmit information across vast timescales',
+                intelligence: 'Piezoelectric properties convert mechanical stress into electrical signals, demonstrating how consciousness might interface with matter'
+            }
         };
 
-        // Factor 9 frequency calculation
-        function calculateFrequency(angle) {
-            const baseFreq = angle * 2; // Convert angle to base frequency
-            let freq = baseFreq;
-            
-            // Reduce to factor 9
-            while (freq > 999) {
-                const digits = freq.toString().split('').map(Number);
-                freq = digits.reduce((sum, digit) => sum + digit, 0);
-            }
-            
-            // Scale to audible/meaningful range
-            if (freq < 100) freq *= 4.32; // 432Hz harmonic series
-            
-            return Math.round(freq);
-        }
-
-        // Frequency classification
-        function classifyFrequency(freq) {
-            const sacredFreqs = [144, 288, 432, 528, 741, 852, 963];
-            const factor9Freqs = [108, 216, 324, 432, 540, 648, 756, 864, 972];
-            
-            if (sacredFreqs.some(sf => Math.abs(freq - sf) < 10)) {
-                return { type: 'Resonant', description: 'Sacred geometry frequency with special mathematical significance' };
-            } else if (factor9Freqs.some(ff => Math.abs(freq - ff) < 10)) {
-                return { type: 'Factor 9', description: 'Mathematical harmony frequency from the Factor 9 grid' };
-            } else {
-                return { type: 'Unique', description: 'Distinctive frequency pattern with unique characteristics' };
-            }
-        }
-
         // Three.js setup
-        let scene, camera, renderer, vectorEquilibrium, activeSpecies = [];
+        let scene, camera, renderer, flowerOfLife;
         let speciesObjects = {};
+        let selectedSpecies = [];
         let connectionLines = [];
+        let flowerCircles = [];
 
-        // Vector Equilibrium vertices (14 vertices + center)
-        const VE_VERTICES = [
-            // Top and bottom vertices
+        // Vector Equilibrium vertices positioned for Flower of Life pattern
+        const FLOWER_VERTICES = [
+            // Center
+            { x: 0, y: 0, z: 0 },
+            
+            // Inner ring (6 vertices)
+            { x: 2, y: 0, z: 0 },
+            { x: 1, y: 0, z: 1.732 },
+            { x: -1, y: 0, z: 1.732 },
+            { x: -2, y: 0, z: 0 },
+            { x: -1, y: 0, z: -1.732 },
+            { x: 1, y: 0, z: -1.732 },
+            
+            // Outer ring (6 vertices)
+            { x: 3, y: 0, z: 1.732 },
+            { x: 0, y: 0, z: 3.464 },
+            { x: -3, y: 0, z: 1.732 },
+            { x: -3, y: 0, z: -1.732 },
+            { x: 0, y: 0, z: -3.464 },
+            { x: 3, y: 0, z: -1.732 },
+            
+            // Upper level
             { x: 0, y: 2, z: 0 },
-            { x: 0, y: -2, z: 0 },
-            
-            // Middle square (4 vertices)
-            { x: 1.414, y: 0, z: 1.414 },
-            { x: -1.414, y: 0, z: 1.414 },
-            { x: -1.414, y: 0, z: -1.414 },
-            { x: 1.414, y: 0, z: -1.414 },
-            
-            // Upper ring (4 vertices)
-            { x: 1.414, y: 1, z: 0 },
-            { x: 0, y: 1, z: 1.414 },
-            { x: -1.414, y: 1, z: 0 },
-            { x: 0, y: 1, z: -1.414 },
-            
-            // Lower ring (4 vertices)
-            { x: 1.414, y: -1, z: 0 },
-            { x: 0, y: -1, z: 1.414 },
-            { x: -1.414, y: -1, z: 0 },
-            { x: 0, y: -1, z: -1.414 },
-            
-            // Center vertex
-            { x: 0, y: 0, z: 0 }
+            { x: 0, y: -2, z: 0 }
         ];
 
         function initThreeJS() {
-            const canvas = document.getElementById('vectorEquilibriumCanvas');
+            const canvas = document.getElementById('flowerOfLifeCanvas');
             const container = canvas.parentElement;
             
             scene = new THREE.Scene();
@@ -390,111 +483,94 @@
             renderer.setSize(container.offsetWidth, container.offsetHeight);
             renderer.setClearColor(0xffffff, 0);
 
-            // Lighting
+            // Lighting setup
             const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
             scene.add(ambientLight);
             const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
             directionalLight.position.set(5, 5, 5);
             scene.add(directionalLight);
 
-            // Create Vector Equilibrium structure
-            createVectorEquilibrium();
+            // Create Flower of Life structure
+            createFlowerOfLife();
             
+            // Position species
+            positionSpeciesByCategory();
+
             // Position camera
-            camera.position.set(5, 5, 5);
+            camera.position.set(0, 6, 8);
             camera.lookAt(0, 0, 0);
 
-            // Mouse controls for rotation
-            let isDragging = false;
-            let previousMousePosition = { x: 0, y: 0 };
-
-            canvas.addEventListener('mousedown', (e) => {
-                isDragging = true;
-                previousMousePosition = { x: e.clientX, y: e.clientY };
-            });
-
-            canvas.addEventListener('mousemove', (e) => {
-                if (isDragging) {
-                    const deltaMove = {
-                        x: e.clientX - previousMousePosition.x,
-                        y: e.clientY - previousMousePosition.y
-                    };
-
-                    const deltaRotationQuaternion = new THREE.Quaternion()
-                        .setFromEuler(new THREE.Euler(
-                            toRadians(deltaMove.y * 1),
-                            toRadians(deltaMove.x * 1),
-                            0,
-                            'XYZ'
-                        ));
-
-                    camera.quaternion.multiplyQuaternions(deltaRotationQuaternion, camera.quaternion);
-                    previousMousePosition = { x: e.clientX, y: e.clientY };
-                }
-
-                // Handle hover effects
-                handleMouseHover(e);
-            });
-
-            canvas.addEventListener('mouseup', () => {
-                isDragging = false;
-            });
-
-            canvas.addEventListener('wheel', (e) => {
-                camera.position.multiplyScalar(e.deltaY > 0 ? 1.1 : 0.9);
-                camera.position.clampLength(3, 15);
-            });
+            // Mouse controls
+            setupMouseControls(canvas);
 
             // Start animation loop
             animate();
         }
 
-        function toRadians(angle) {
-            return angle * (Math.PI / 180);
-        }
-
-        function createVectorEquilibrium() {
+        function createFlowerOfLife() {
             const group = new THREE.Group();
 
-            // Create structural lines (Flower of Life curved appearance)
-            const lineMaterial = new THREE.LineBasicMaterial({ 
+            // Create Flower of Life circles
+            const circleGeometry = new THREE.RingGeometry(0.8, 0.85, 32);
+            const circleMaterial = new THREE.MeshBasicMaterial({ 
                 color: 0xbdc3c7, 
                 transparent: true, 
-                opacity: 0.3 
+                opacity: 0.3,
+                side: THREE.DoubleSide
             });
 
-            // Connect vertices with curved lines
-            for (let i = 0; i < VE_VERTICES.length - 1; i++) {
-                for (let j = i + 1; j < VE_VERTICES.length - 1; j++) {
-                    const curve = new THREE.QuadraticBezierCurve3(
-                        new THREE.Vector3(VE_VERTICES[i].x, VE_VERTICES[i].y, VE_VERTICES[i].z),
-                        new THREE.Vector3(0, 0, 0), // Center curve point
-                        new THREE.Vector3(VE_VERTICES[j].x, VE_VERTICES[j].y, VE_VERTICES[j].z)
-                    );
-                    
-                    const points = curve.getPoints(20);
-                    const geometry = new THREE.BufferGeometry().setFromPoints(points);
+            // Create circles at each vertex position
+            FLOWER_VERTICES.forEach((vertex, index) => {
+                const circle = new THREE.Mesh(circleGeometry, circleMaterial.clone());
+                circle.position.set(vertex.x, vertex.y, vertex.z);
+                circle.rotation.x = -Math.PI / 2; // Lay flat
+                group.add(circle);
+                flowerCircles.push(circle);
+            });
+
+            // Create connecting lines between overlapping circles
+            const lineMaterial = new THREE.LineBasicMaterial({ 
+                color: 0xd5dbdb, 
+                transparent: true, 
+                opacity: 0.2 
+            });
+
+            // Connect adjacent circles in the flower pattern
+            const connections = [
+                [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], // Center to inner ring
+                [1, 2], [2, 3], [3, 4], [4, 5], [5, 6], [6, 1], // Inner ring connections
+                [1, 7], [2, 8], [3, 9], [4, 10], [5, 11], [6, 12], // Inner to outer ring
+                [7, 8], [8, 9], [9, 10], [10, 11], [11, 12], [12, 7] // Outer ring connections
+            ];
+
+            connections.forEach(([i, j]) => {
+                if (FLOWER_VERTICES[i] && FLOWER_VERTICES[j]) {
+                    const geometry = new THREE.BufferGeometry().setFromPoints([
+                        new THREE.Vector3(FLOWER_VERTICES[i].x, FLOWER_VERTICES[i].y, FLOWER_VERTICES[i].z),
+                        new THREE.Vector3(FLOWER_VERTICES[j].x, FLOWER_VERTICES[j].y, FLOWER_VERTICES[j].z)
+                    ]);
                     const line = new THREE.Line(geometry, lineMaterial);
                     group.add(line);
                 }
-            }
+            });
 
             scene.add(group);
-            vectorEquilibrium = group;
+            flowerOfLife = group;
         }
 
         function positionSpeciesByCategory() {
             const categoryPositions = {
-                'aquatic': [0, 1, 2], // Top vertices
-                'terrestrial': [3, 4, 5, 6, 7], // Middle ring
-                'networks': [8, 9, 10], // Lower ring
-                'elemental': [11, 12, 13] // Bottom vertices
+                'aquatic': [1, 2, 3], // Inner ring positions
+                'terrestrial': [4, 5, 6, 7, 8], // Mix of inner and outer
+                'networks': [9, 10, 11], // Outer ring
+                'elemental': [12, 13, 0] // Upper, lower, and center
             };
 
-            let speciesKeys = Object.keys(speciesDatabase);
-            
             Object.entries(categoryPositions).forEach(([category, positions]) => {
-                const categorySpecies = speciesKeys.filter(key => speciesDatabase[key].category === category);
+                const categorySpecies = Object.keys(speciesDatabase).filter(key => 
+                    speciesDatabase[key].category === category
+                );
+                
                 categorySpecies.forEach((speciesKey, index) => {
                     if (positions[index] !== undefined) {
                         createSpeciesObject(speciesKey, positions[index]);
@@ -505,24 +581,89 @@
 
         function createSpeciesObject(speciesKey, vertexIndex) {
             const species = speciesDatabase[speciesKey];
-            const position = VE_VERTICES[vertexIndex];
+            const position = FLOWER_VERTICES[vertexIndex];
 
-            const geometry = new THREE.SphereGeometry(0.15, 16, 16);
+            // Create species sphere
+            const geometry = new THREE.SphereGeometry(0.25, 16, 16);
             const material = new THREE.MeshPhongMaterial({ 
                 color: species.color,
                 transparent: true,
-                opacity: 0.8
+                opacity: 0.9,
+                emissive: species.color,
+                emissiveIntensity: 0.1
             });
             
             const sphere = new THREE.Mesh(geometry, material);
-            sphere.position.set(position.x, position.y, position.z);
-            sphere.userData = { species: speciesKey, originalPosition: {...position} };
+            sphere.position.set(position.x, position.y + 0.1, position.z);
+            sphere.userData = { 
+                species: speciesKey, 
+                originalPosition: {x: position.x, y: position.y + 0.1, z: position.z},
+                originalColor: species.color,
+                selected: false
+            };
             
             scene.add(sphere);
             speciesObjects[speciesKey] = sphere;
+
+            // Make the corresponding flower circle glow when species is present
+            if (flowerCircles[vertexIndex]) {
+                const glowMaterial = flowerCircles[vertexIndex].material;
+                glowMaterial.color.setHex(species.color);
+                glowMaterial.opacity = 0.4;
+            }
         }
 
-        function handleMouseHover(event) {
+        function setupMouseControls(canvas) {
+            let isDragging = false;
+            let previousMousePosition = { x: 0, y: 0 };
+
+            canvas.addEventListener('mousedown', (e) => {
+                const intersect = getMouseIntersection(e);
+                if (intersect && intersect.object.userData.species) {
+                    // Species click - toggle selection
+                    toggleSpeciesSelection(intersect.object.userData.species);
+                } else {
+                    // Start dragging
+                    isDragging = true;
+                    previousMousePosition = { x: e.clientX, y: e.clientY };
+                }
+            });
+
+            canvas.addEventListener('mousemove', (e) => {
+                if (isDragging) {
+                    const deltaMove = {
+                        x: e.clientX - previousMousePosition.x,
+                        y: e.clientY - previousMousePosition.y
+                    };
+
+                    // Rotate the entire flower of life
+                    flowerOfLife.rotation.y += deltaMove.x * 0.01;
+                    flowerOfLife.rotation.x += deltaMove.y * 0.01;
+
+                    // Rotate species with the flower
+                    Object.values(speciesObjects).forEach(obj => {
+                        obj.rotation.y = flowerOfLife.rotation.y;
+                        obj.rotation.x = flowerOfLife.rotation.x;
+                    });
+
+                    previousMousePosition = { x: e.clientX, y: e.clientY };
+                } else {
+                    handleMouseHover(e);
+                }
+            });
+
+            canvas.addEventListener('mouseup', () => {
+                isDragging = false;
+            });
+
+            canvas.addEventListener('wheel', (e) => {
+                e.preventDefault();
+                camera.position.multiplyScalar(e.deltaY > 0 ? 1.1 : 0.9);
+                camera.position.clampLength(4, 20);
+            });
+        }
+
+        function getMouseIntersection(event) {
             const rect = event.target.getBoundingClientRect();
             const mouse = new THREE.Vector2();
             mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
@@ -532,327 +673,441 @@
             raycaster.setFromCamera(mouse, camera);
 
             const intersects = raycaster.intersectObjects(Object.values(speciesObjects));
+            return intersects.length > 0 ? intersects[0] : null;
+        }
+
+        function handleMouseHover(event) {
+            const intersect = getMouseIntersection(event);
             const tooltip = document.getElementById('tooltip');
 
-            if (intersects.length > 0) {
-                const species = intersects[0].object.userData.species;
-                const speciesData = speciesDatabase[species];
+            if (intersect && intersect.object.userData.species) {
+                const speciesKey = intersect.object.userData.species;
+                const speciesData = speciesDatabase[speciesKey];
                 
-                tooltip.innerHTML = `${speciesData.icon} ${speciesData.name}`;
+                tooltip.innerHTML = `${speciesData.icon} ${speciesData.name}<br><em>${speciesData.wisdom}</em>`;
                 tooltip.style.display = 'block';
-                tooltip.style.left = (event.clientX + 10) + 'px';
-                tooltip.style.top = (event.clientY - 10) + 'px';
+                tooltip.style.left = (event.clientX + 15) + 'px';
+                tooltip.style.top = (event.clientY - 60) + 'px';
+
+                // Highlight on hover
+                intersect.object.material.emissiveIntensity = 0.3;
             } else {
                 tooltip.style.display = 'none';
+                
+                // Reset emissive intensity for non-selected species
+                Object.values(speciesObjects).forEach(obj => {
+                    if (!obj.userData.selected) {
+                        obj.material.emissiveIntensity = 0.1;
+                    }
+                });
             }
         }
 
-        function animate() {
-            requestAnimationFrame(animate);
-            
-            // Gentle rotation of the entire structure
-            if (vectorEquilibrium) {
-                vectorEquilibrium.rotation.y += 0.001;
-            }
-            
-            renderer.render(scene, camera);
-        }
+        function toggleSpeciesSelection(speciesKey) {
+            const obj = speciesObjects[speciesKey];
+            if (!obj) return;
 
-        function loadEcosystemTrio() {
-            activeSpecies = ['dolphin', 'bee', 'tree'];
-            animateSpeciesInteraction(activeSpecies);
-            generateAnalysis('Triangle Test: Marine + Collective + Network Intelligence');
-        }
-
-        function loadEcosystemQuad() {
-            activeSpecies = ['whale', 'horse', 'mycelium', 'crystal'];
-            animateSpeciesInteraction(activeSpecies);
-            generateAnalysis('Square Test: Ocean Memory + Partnership + Underground Networks + Deep Time');
-        }
-
-        function loadComplexEcosystem() {
-            activeSpecies = ['dolphin', 'bee', 'tree', 'coral', 'dog', 'crystal'];
-            animateSpeciesInteraction(activeSpecies);
-            generateAnalysis('Complex Ecosystem: Multi-dimensional Intelligence Harmony');
-        }
-
-        function animateSpeciesInteraction(speciesKeys) {
-            // Reset all species to original positions and opacity
-            Object.values(speciesObjects).forEach(obj => {
-                obj.position.copy(obj.userData.originalPosition);
-                obj.material.opacity = 0.3;
+            if (obj.userData.selected) {
+                // Deselect
+                obj.userData.selected = false;
+                obj.material.emissiveIntensity = 0.1;
                 obj.scale.set(1, 1, 1);
-            });
+                selectedSpecies = selectedSpecies.filter(key => key !== speciesKey);
+            } else if (selectedSpecies.length < 4) {
+                // Select (max 4)
+                obj.userData.selected = true;
+                obj.material.emissiveIntensity = 0.5;
+                obj.scale.set(1.3, 1.3, 1.3);
+                selectedSpecies.push(speciesKey);
+            }
 
+            updateSelectedSpeciesDisplay();
+            updateConnectionLines();
+            generateIntelligenceAnalysis();
+        }
+
+        function updateSelectedSpeciesDisplay() {
+            const container = document.getElementById('selectedSpecies');
+            
+            if (selectedSpecies.length === 0) {
+                container.innerHTML = '<p style="color: #7f8c8d; font-style: italic;">Select species to begin exploring their intelligence relationships...</p>';
+                return;
+            }
+
+            const badges = selectedSpecies.map(key => {
+                const species = speciesDatabase[key];
+                return `
+                    <div class="species-badge" onclick="toggleSpeciesSelection('${key}')">
+                        ${species.icon} ${species.name}
+                        <span class="remove">×</span>
+                    </div>
+                `;
+            }).join('');
+
+            container.innerHTML = badges;
+        }
+
+        function updateConnectionLines() {
             // Clear existing connection lines
             connectionLines.forEach(line => scene.remove(line));
             connectionLines = [];
 
-            // Highlight active species and move them closer
-            const targetRadius = 1.5;
-            speciesKeys.forEach((key, index) => {
-                const obj = speciesObjects[key];
-                if (obj) {
-                    obj.material.opacity = 1.0;
-                    obj.scale.set(1.3, 1.3, 1.3);
-                    
-                    // Position in a circle for better visualization
-                    const angle = (index / speciesKeys.length) * Math.PI * 2;
-                    const targetX = Math.cos(angle) * targetRadius;
-                    const targetZ = Math.sin(angle) * targetRadius;
-                    
-                    // Animate to new position
-                    const startPos = obj.position.clone();
-                    const targetPos = new THREE.Vector3(targetX, 0, targetZ);
-                    
-                    let progress = 0;
-                    const animateMove = () => {
-                        progress += 0.02;
-                        if (progress <= 1) {
-                            obj.position.lerpVectors(startPos, targetPos, progress);
-                            requestAnimationFrame(animateMove);
-                        }
-                    };
-                    animateMove();
-                }
-            });
+            if (selectedSpecies.length < 2) return;
 
-            // Create connection lines between active species
-            setTimeout(() => {
-                for (let i = 0; i < speciesKeys.length; i++) {
-                    for (let j = i + 1; j < speciesKeys.length; j++) {
-                        const obj1 = speciesObjects[speciesKeys[i]];
-                        const obj2 = speciesObjects[speciesKeys[j]];
-                        
-                        if (obj1 && obj2) {
-                            const curve = new THREE.QuadraticBezierCurve3(
-                                obj1.position.clone(),
-                                new THREE.Vector3(0, 0.5, 0),
-                                obj2.position.clone()
-                            );
-                            
-                            const points = curve.getPoints(20);
-                            const geometry = new THREE.BufferGeometry().setFromPoints(points);
-                            const material = new THREE.LineBasicMaterial({ 
-                                color: 0x3498db, 
-                                transparent: true, 
-                                opacity: 0.8 
-                            });
-                            
-                            const line = new THREE.Line(geometry, material);
-                            scene.add(line);
-                            connectionLines.push(line);
-                        }
+            // Create flowing energy lines between selected species
+            for (let i = 0; i < selectedSpecies.length; i++) {
+                for (let j = i + 1; j < selectedSpecies.length; j++) {
+                    const obj1 = speciesObjects[selectedSpecies[i]];
+                    const obj2 = speciesObjects[selectedSpecies[j]];
+                    
+                    if (obj1 && obj2) {
+                        createFlowingEnergyLine(obj1.position, obj2.position);
                     }
                 }
-            }, 1000);
+            }
         }
 
-        function generateAnalysis(testType) {
-            if (activeSpecies.length === 0) return;
+        function createFlowingEnergyLine(pos1, pos2) {
+            // Create a curved line with flowing energy effect
+            const curve = new THREE.QuadraticBezierCurve3(
+                pos1.clone(),
+                new THREE.Vector3(
+                    (pos1.x + pos2.x) / 2,
+                    Math.max(pos1.y, pos2.y) + 1,
+                    (pos1.z + pos2.z) / 2
+                ),
+                pos2.clone()
+            );
+            
+            const points = curve.getPoints(50);
+            const geometry = new THREE.BufferGeometry().setFromPoints(points);
+            
+            // Create flowing energy material
+            const material = new THREE.LineBasicMaterial({ 
+                color: 0x3498db,
+                transparent: true, 
+                opacity: 0.8,
+                linewidth: 3
+            });
+            
+            const line = new THREE.Line(geometry, material);
+            scene.add(line);
+            connectionLines.push(line);
 
+            // Add flowing particles along the line
+            createFlowingParticles(points);
+        }
+
+        function createFlowingParticles(points) {
+            const particleGeometry = new THREE.SphereGeometry(0.03, 8, 8);
+            const particleMaterial = new THREE.MeshBasicMaterial({ 
+                color: 0xffffff,
+                transparent: true,
+                opacity: 0.8
+            });
+
+            // Create 3 particles that will flow along the line
+            for (let i = 0; i < 3; i++) {
+                const particle = new THREE.Mesh(particleGeometry, particleMaterial);
+                const startIndex = Math.floor(i * points.length / 3);
+                particle.position.copy(points[startIndex]);
+                particle.userData = { 
+                    points: points, 
+                    currentIndex: startIndex,
+                    isFlowing: true
+                };
+                scene.add(particle);
+                connectionLines.push(particle); // Store with connection lines for cleanup
+            }
+        }
+
+        function generateIntelligenceAnalysis() {
             const analysisPanel = document.getElementById('analysisPanel');
+            
+            if (selectedSpecies.length === 0) {
+                analysisPanel.classList.remove('active');
+                return;
+            }
+
             let analysisHTML = `
-                <div class="analysis-title">🔬 ${testType} - Geometric Consciousness Analysis</div>
-                <div class="wisdom-insight">
-                    <strong>Key Wisdom Insight:</strong> This combination reveals how different types of consciousness create geometric harmony patterns that indicate ecosystem compatibility and collaborative potential.
+                <div style="text-align: center; margin-bottom: 30px;">
+                    <h2 style="color: #2980b9; font-size: 2em; margin-bottom: 10px;">
+                        🌸 Intelligence Relationship Discovery
+                    </h2>
+                    <p style="color: #7f8c8d; font-size: 1.1em;">
+                        Exploring the sacred geometry of ${selectedSpecies.length} consciousness types
+                    </p>
                 </div>
             `;
 
-            // Generate pairwise relationships
-            analysisHTML += '<h3>🔗 Species Intelligence Relationships</h3>';
-            
-            for (let i = 0; i < activeSpecies.length; i++) {
-                for (let j = i + 1; j < activeSpecies.length; j++) {
-                    const species1 = speciesDatabase[activeSpecies[i]];
-                    const species2 = speciesDatabase[activeSpecies[j]];
-                    
-                    // Calculate geometric relationship
-                    const obj1 = speciesObjects[activeSpecies[i]];
-                    const obj2 = speciesObjects[activeSpecies[j]];
-                    const distance = obj1.position.distanceTo(obj2.position);
-                    const angle = Math.acos(obj1.position.dot(obj2.position) / (obj1.position.length() * obj2.position.length())) * (180 / Math.PI);
-                    
-                    const frequency = calculateFrequency(angle);
-                    const classification = classifyFrequency(frequency);
-                    
-                    analysisHTML += `
-                        <div class="species-relationship">
-                            <h4>${species1.icon} ${species1.name} ↔ ${species2.icon} ${species2.name}</h4>
-                            <div class="frequency-info">
-                                <strong>Intelligence Relationship Frequency:</strong> ${frequency}Hz (${classification.type})
-                                <br><em>${classification.description}</em>
-                            </div>
-                            <div class="geometric-insight">
-                                <strong>PERCEIVE:</strong> Both species demonstrate unique sensory intelligence that ${classification.type === 'Resonant' ? 'harmonizes naturally' : 'creates distinctive patterns'} when positioned at ${Math.round(angle)}° geometric relationship.
-                                <br><strong>RELATE:</strong> Their consciousness styles ${classification.type === 'Resonant' ? 'complement each other well' : 'offer unique collaborative potential'} within shared ecosystem spaces.
-                                <br><strong>APPLY:</strong> This pairing could ${classification.type === 'Resonant' ? 'thrive in the same environment' : 'work best in connected but distinct ecosystems'}, offering mutual benefits through their ${Math.round(distance * 100)/100} units of geometric separation.
-                            </div>
-                        </div>
-                    `;
-                }
-            }
+            // Individual species insights
+            analysisHTML += `
+                <div class="insight-section">
+                    <h4>🔍 Individual Intelligence Profiles</h4>
+                    <div class="species-comparison">
+            `;
 
-            // Multi-species pattern analysis
-            if (activeSpecies.length >= 3) {
-                const totalAngles = activeSpecies.length === 3 ? 180 : 
-                                 activeSpecies.length === 4 ? 360 : 
-                                 (activeSpecies.length - 2) * 180;
-                const groupFrequency = calculateFrequency(totalAngles);
-                const groupClassification = classifyFrequency(groupFrequency);
-
+            selectedSpecies.forEach(key => {
+                const species = speciesDatabase[key];
                 analysisHTML += `
-                    <h3>🔺 Ecosystem Pattern Analysis</h3>
-                    <div class="species-relationship">
-                        <h4>Combined Intelligence Pattern: ${groupFrequency}Hz (${groupClassification.type})</h4>
-                        <div class="frequency-info">
-                            <strong>Ecosystem Harmony Analysis:</strong> ${groupClassification.description}
-                        </div>
-                        <div class="geometric-insight">
-                            <strong>Ecosystem Intelligence Integration:</strong> These ${activeSpecies.length} consciousness types create a ${groupClassification.type.toLowerCase()} frequency pattern, suggesting they ${groupClassification.type === 'Resonant' ? 'would naturally harmonize within a single ecosystem' : 'offer unique collaborative potential across connected ecosystems'}.
-                        </div>
-                        <div class="wisdom-insight">
-                            <strong>Human Learning Opportunity:</strong> This geometric relationship teaches us about ${groupClassification.type === 'Resonant' ? 'natural ecosystem harmony' : 'the creative potential of diverse intelligence collaboration'}. Each species contributes unique consciousness capabilities that ${groupClassification.type === 'Resonant' ? 'complement and support' : 'distinctively enhance'} the others.
-                        </div>
+                    <div class="comparison-card">
+                        <h5>${species.icon} ${species.name}</h5>
+                        <p><strong>Intelligence Type:</strong> ${species.intelligence}</p>
+                        <p><strong>Wisdom Teaching:</strong> ${species.wisdom}</p>
                     </div>
                 `;
+            });
+
+            analysisHTML += `</div></div>`;
+
+            // Similarities analysis
+            if (selectedSpecies.length >= 2) {
+                analysisHTML += generateSimilaritiesAnalysis();
             }
 
-            // Research mode analysis
-            if (document.getElementById('showSimilarTypes').checked) {
-                analysisHTML += generateSimilarTypesAnalysis();
+            // Differences analysis
+            if (selectedSpecies.length >= 2) {
+                analysisHTML += generateDifferencesAnalysis();
             }
-            
-            if (document.getElementById('showUniversalPatterns').checked) {
-                analysisHTML += generateUniversalPatternsAnalysis();
+
+            // Ecosystem complementarity
+            if (selectedSpecies.length >= 2) {
+                analysisHTML += generateComplementarityAnalysis();
             }
-            
-            if (document.getElementById('showCrossEcosystem').checked) {
-                analysisHTML += generateCrossEcosystemAnalysis();
-            }
-            
-            if (document.getElementById('showCompatibility').checked) {
-                analysisHTML += generateCompatibilityMatrix();
-            }
+
+            // Human learning opportunities
+            analysisHTML += generateHumanLearningOpportunities();
 
             analysisPanel.innerHTML = analysisHTML;
             analysisPanel.classList.add('active');
         }
 
-        function generateSimilarTypesAnalysis() {
-            return `
-                <h3>🔍 Similar Intelligence Types Analysis</h3>
-                <div class="species-relationship">
-                    <h4>Cross-Category Intelligence Patterns</h4>
-                    <div class="geometric-insight">
-                        <strong>Marine + Terrestrial Parallel:</strong> Dolphins and Dogs both demonstrate heart-centered loyalty intelligence, despite occupying different ecosystems. Their geometric frequencies suggest similar consciousness approaches to community bonding.
-                        <br><br><strong>Network Intelligence Similarity:</strong> Trees and Mycelium show nearly identical communication frequency patterns, revealing that underground and above-ground networks operate on similar geometric principles.
-                        <br><br><strong>Ancient Wisdom Correlation:</strong> Whales and Crystals both carry deep-time intelligence, with frequency patterns that suggest they access similar planetary memory systems across vast temporal scales.
-                    </div>
-                </div>
-            `;
-        }
-
-        function generateUniversalPatternsAnalysis() {
-            return `
-                <h3>🌐 Universal Ecosystem Patterns</h3>
-                <div class="species-relationship">
-                    <h4>Consistent Intelligence Roles Across All Ecosystems</h4>
-                    <div class="wisdom-insight">
-                        <strong>The Sacred Triad:</strong> Every thriving ecosystem appears to need three core intelligence types:
-                        <br>• <strong>Network Intelligence</strong> (Trees, Mycelium, Coral) - Information and resource distribution
-                        <br>• <strong>Adaptive Intelligence</strong> (Dolphins, Bees, Crows) - Dynamic problem-solving and communication  
-                        <br>• <strong>Grounding Intelligence</strong> (Crystals, Cows, Ancient systems) - Stability and deep memory
-                    </div>
-                    <div class="geometric-insight">
-                        <strong>Universal Frequency:</strong> The 432Hz pattern appears consistently when these three intelligence types are positioned in triangular relationships, suggesting this is nature's fundamental harmony frequency for ecosystem stability.
-                    </div>
-                </div>
-            `;
-        }
-
-        function generateCrossEcosystemAnalysis() {
-            return `
-                <h3>🌊🏞️ Cross-Ecosystem Intelligence Matches</h3>
-                <div class="species-relationship">
-                    <h4>Marine-Terrestrial Intelligence Bridges</h4>
-                    <div class="geometric-insight">
-                        <strong>Dolphin ↔ Horse Partnership:</strong> Both species demonstrate partnership consciousness with humans, creating similar frequency patterns (528Hz range) that suggest they could facilitate marine-terrestrial collaboration projects.
-                        <br><br><strong>Whale ↔ Tree Deep Memory:</strong> Ancient oaks and whales both carry generational wisdom, with geometric relationships producing deep-time frequencies (144Hz range) that indicate shared access to planetary memory systems.
-                        <br><br><strong>Coral ↔ Mycelium Network Resonance:</strong> Both create ecosystem-wide communication networks, with nearly identical frequency patterns suggesting they could be integrated into comprehensive land-sea restoration projects.
-                    </div>
-                </div>
-            `;
-        }
-
-        function generateCompatibilityMatrix() {
-            const categories = ['aquatic', 'terrestrial', 'networks', 'elemental'];
-            const categoryNames = {
-                'aquatic': '🌊 Aquatic Intelligence',
-                'terrestrial': '🏞️ Land & Air Wisdom', 
-                'networks': '🌱 Living Networks',
-                'elemental': '💎 Earth Elements'
-            };
-
-            let matrixHTML = `
-                <h3>⚖️ Ecosystem Compatibility Matrix</h3>
-                <div class="species-relationship">
-                    <h4>Intelligence Category Harmony Scores</h4>
+        function generateSimilaritiesAnalysis() {
+            const categories = selectedSpecies.map(key => speciesDatabase[key].category);
+            const uniqueCategories = [...new Set(categories)];
+            
+            let similaritiesHTML = `
+                <div class="insight-section">
+                    <h4>🤝 Where Their Intelligence is Alike</h4>
             `;
 
-            for (let i = 0; i < categories.length; i++) {
-                for (let j = i + 1; j < categories.length; j++) {
-                    const cat1 = categories[i];
-                    const cat2 = categories[j];
-                    
-                    // Calculate compatibility based on geometric positioning
-                    const compatibility = Math.random() > 0.3 ? 'High' : 'Moderate'; // Simplified for demo
-                    const harmonyFreq = compatibility === 'High' ? '432-528Hz Range' : '200-400Hz Range';
-                    
-                    matrixHTML += `
-                        <div class="geometric-insight">
-                            <strong>${categoryNames[cat1]} + ${categoryNames[cat2]}:</strong> ${compatibility} Compatibility (${harmonyFreq})
-                            <br><em>${compatibility === 'High' ? 'These intelligence types naturally support each other in shared ecosystems' : 'These types work best in connected but distinct ecosystem zones'}</em>
-                        </div>
-                    `;
-                }
+            if (uniqueCategories.length < categories.length) {
+                // Some species share categories
+                const sharedCategories = categories.filter((cat, index) => 
+                    categories.indexOf(cat) !== index
+                );
+                
+                similaritiesHTML += `
+                    <p><strong>Shared Intelligence Domains:</strong> These species operate in similar consciousness realms, suggesting natural compatibility and mutual understanding.</p>
+                `;
             }
 
-            matrixHTML += `</div>`;
-            return matrixHTML;
+            // Universal patterns
+            similaritiesHTML += `
+                <p><strong>Universal Intelligence Patterns:</strong> All living systems demonstrate:</p>
+                <ul style="margin: 15px 0; padding-left: 30px;">
+                    <li><strong>Adaptive Learning:</strong> Each species continuously adjusts behavior based on environmental feedback</li>
+                    <li><strong>Communication Systems:</strong> All have evolved sophisticated ways to share information within their communities</li>
+                    <li><strong>Resource Optimization:</strong> Each demonstrates elegant efficiency in energy and resource use</li>
+                    <li><strong>Relationship Intelligence:</strong> All participate in complex webs of interdependent relationships</li>
+                </ul>
+            `;
+
+            similaritiesHTML += `</div>`;
+            return similaritiesHTML;
         }
 
-        function resetVisualization() {
-            activeSpecies = [];
-            
-            // Reset all species to original positions
-            Object.values(speciesObjects).forEach(obj => {
-                obj.position.copy(obj.userData.originalPosition);
-                obj.material.opacity = 0.8;
-                obj.scale.set(1, 1, 1);
+        function generateDifferencesAnalysis() {
+            let differencesHTML = `
+                <div class="insight-section">
+                    <h4>🌈 Where Their Intelligence is Different</h4>
+                    <p><strong>Unique Consciousness Contributions:</strong> Each species has evolved specialized intelligence perfectly adapted to their ecological niche.</p>
+                    <div class="species-comparison">
+            `;
+
+            selectedSpecies.forEach(key => {
+                const species = speciesDatabase[key];
+                const categoryDescriptions = {
+                    'aquatic': 'Masters of fluid dynamics and three-dimensional movement through water',
+                    'terrestrial': 'Experts in solid-ground navigation and aerial awareness',
+                    'networks': 'Specialists in distributed communication and resource sharing',
+                    'elemental': 'Keepers of deep-time stability and mineral consciousness'
+                };
+
+                differencesHTML += `
+                    <div class="comparison-card">
+                        <h5>${species.icon} ${species.name} Specialization</h5>
+                        <p><strong>Unique Niche:</strong> ${categoryDescriptions[species.category]}</p>
+                        <p><strong>Distinctive Gift:</strong> ${species.intelligence}</p>
+                    </div>
+                `;
             });
 
-            // Clear connection lines
-            connectionLines.forEach(line => scene.remove(line));
-            connectionLines = [];
+            differencesHTML += `</div></div>`;
+            return differencesHTML;
+        }
 
-            // Hide analysis panel
+        function generateComplementarityAnalysis() {
+            const categories = selectedSpecies.map(key => speciesDatabase[key].category);
+            const uniqueCategories = [...new Set(categories)];
+            
+            let complementHTML = `
+                <div class="insight-section">
+                    <h4>🌿 How Their Intelligence Complements Ecosystems</h4>
+            `;
+
+            if (uniqueCategories.length > 1) {
+                complementHTML += `
+                    <p><strong>Multi-Dimensional Intelligence Network:</strong> This combination spans ${uniqueCategories.length} different consciousness domains, creating a rich tapestry of complementary capabilities.</p>
+                `;
+
+                // Specific complementarity patterns
+                if (categories.includes('aquatic') && categories.includes('terrestrial')) {
+                    complementHTML += `
+                        <p><strong>🌊↔🏞️ Water-Land Bridge:</strong> Aquatic and terrestrial intelligence types can create powerful partnerships for watershed restoration and climate adaptation projects.</p>
+                    `;
+                }
+                
+                if (categories.includes('networks')) {
+                    complementHTML += `
+                        <p><strong>🌱 Network Integration:</strong> Living network intelligence provides the connecting infrastructure that allows other types of consciousness to share resources and information.</p>
+                    `;
+                }
+                
+                if (categories.includes('elemental')) {
+                    complementHTML += `
+                        <p><strong>💎 Deep-Time Stability:</strong> Earth element consciousness provides the foundational stability and memory that supports all other forms of intelligence.</p>
+                    `;
+                }
+            } else {
+                complementHTML += `
+                    <p><strong>Specialized Ecosystem Team:</strong> These species share similar intelligence domains, suggesting they could form highly efficient specialized teams for specific ecological functions.</p>
+                `;
+            }
+
+            // Ecosystem synergy potential
+            complementHTML += `
+                <p><strong>Synergy Potential:</strong> Together, these intelligence types could:</p>
+                <ul style="margin: 15px 0; padding-left: 30px;">
+                    <li>Create more resilient ecosystem designs through diverse problem-solving approaches</li>
+                    <li>Develop innovative conservation strategies that address multiple ecological dimensions</li>
+                    <li>Serve as models for human communities seeking to integrate diverse forms of intelligence</li>
+                    <li>Demonstrate how different consciousness types can collaborate rather than compete</li>
+                </ul>
+            `;
+
+            complementHTML += `</div>`;
+            return complementHTML;
+        }
+
+        function generateHumanLearningOpportunities() {
+            let learningHTML = `
+                <div class="insight-section">
+                    <h4>🧠 What Humans Can Learn from This Intelligence Combination</h4>
+            `;
+
+            const selectedSpeciesData = selectedSpecies.map(key => speciesDatabase[key]);
+            
+            // Generate learning insights based on the combination
+            learningHTML += `
+                <p><strong>Integration Wisdom:</strong> By studying how these ${selectedSpecies.length} consciousness types operate, humans can learn to:</p>
+                <ul style="margin: 15px 0; padding-left: 30px;">
+            `;
+
+            selectedSpeciesData.forEach(species => {
+                const learningInsights = {
+                    'dolphin': 'Develop sonar-like intuitive sensing for reading energy and environment',
+                    'whale': 'Access deep-time wisdom and carry generational knowledge with responsibility',
+                    'coral': 'Build collaborative communities through symbiotic relationship principles',
+                    'dog': 'Practice unconditional love and loyal friendship in all relationships',
+                    'horse': 'Develop authentic partnership consciousness through energetic sensitivity',
+                    'cow': 'Embody gentle strength and peaceful presence in community leadership',
+                    'bee': 'Coordinate collective intelligence through precise communication systems',
+                    'crow': 'Innovate cultural solutions and pass wisdom across generations',
+                    'tree': 'Create network connections that share resources and support community resilience',
+                    'mycelium': 'Develop underground awareness and chemical communication sensitivity',
+                    'riparian': 'Bridge different worlds and filter information with discernment',
+                    'crystal': 'Access geological patience and maintain stable information across time'
+                };
+
+                learningHTML += `<li><strong>${species.name} Teaching:</strong> ${learningInsights[selectedSpecies.find(key => speciesDatabase[key] === species)] || 'Develop unique consciousness capabilities'}</li>`;
+            });
+
+            learningHTML += `</ul>`;
+
+            // Practical applications
+            learningHTML += `
+                <p><strong>Practical Applications:</strong> This intelligence combination suggests humans could:</p>
+                <ul style="margin: 15px 0; padding-left: 30px;">
+                    <li>Design regenerative communities that integrate multiple forms of consciousness</li>
+                    <li>Develop technologies that mimic these natural intelligence networks</li>
+                    <li>Create conservation strategies that honor the unique gifts of each species</li>
+                    <li>Build educational systems that recognize and nurture diverse intelligence types</li>
+                    <li>Foster interspecies communication protocols based on geometric harmony principles</li>
+                </ul>
+            `;
+
+            learningHTML += `</div>`;
+            return learningHTML;
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            // Gentle breathing animation for flower circles
+            const time = Date.now() * 0.001;
+            flowerCircles.forEach((circle, index) => {
+                if (circle && circle.material) {
+                    circle.material.opacity = 0.3 + Math.sin(time + index * 0.5) * 0.1;
+                    circle.scale.setScalar(1 + Math.sin(time * 0.5 + index * 0.3) * 0.05);
+                }
+            });
+
+            // Animate flowing particles
+            connectionLines.forEach(obj => {
+                if (obj.userData && obj.userData.isFlowing) {
+                    obj.userData.currentIndex += 1;
+                    if (obj.userData.currentIndex >= obj.userData.points.length) {
+                        obj.userData.currentIndex = 0;
+                    }
+                    obj.position.copy(obj.userData.points[obj.userData.currentIndex]);
+                }
+            });
+
+            // Gentle species breathing
+            Object.values(speciesObjects).forEach(obj => {
+                if (obj.userData.selected) {
+                    obj.scale.setScalar(1.3 + Math.sin(time * 2) * 0.1);
+                }
+            });
+            
+            renderer.render(scene, camera);
+        }
+
+        function clearSelection() {
+            selectedSpecies.forEach(key => {
+                const obj = speciesObjects[key];
+                if (obj) {
+                    obj.userData.selected = false;
+                    obj.material.emissiveIntensity = 0.1;
+                    obj.scale.set(1, 1, 1);
+                }
+            });
+            
+            selectedSpecies = [];
+            updateSelectedSpeciesDisplay();
+            updateConnectionLines();
+            
             document.getElementById('analysisPanel').classList.remove('active');
         }
 
         function loadFromRedefinigApp() {
-            alert('Integration with Redefining Intelligence App - This will connect to your species research database once API access is restored!');
-        }
-
-        function updateAnalysis() {
-            if (activeSpecies.length > 0) {
-                generateAnalysis('Research Mode Analysis');
-            }
+            alert('🚀 Ready to Connect!\n\nThis will integrate with your Redefining Intelligence App database to:\n\n• Load real species consciousness data\n• Use actual 12-dimensional intelligence scores\n• Generate deeper geometric insights\n• Create research-quality reports\n\nComing soon when API access is restored!');
         }
 
         // Window resize handler
         window.addEventListener('resize', () => {
-            const canvas = document.getElementById('vectorEquilibriumCanvas');
+            const canvas = document.getElementById('flowerOfLifeCanvas');
             const container = canvas.parentElement;
             
             camera.aspect = container.offsetWidth / container.offsetHeight;
@@ -863,7 +1118,6 @@
         // Initialize when page loads
         window.addEventListener('load', () => {
             initThreeJS();
-            positionSpeciesByCategory();
         });
     </script>
 </body>
